@@ -1,7 +1,8 @@
 import java.util.List;
 
 public class LLAPSearch extends GenericSearch {
-    public static String solve(String initialState, String strategy, boolean visualize) {
+
+    public static Node solve(String initialState, String strategy, boolean visualize) {
         State initial = parseInitialState(initialState);
         return search(initial, strategy);
     }
@@ -47,13 +48,7 @@ public class LLAPSearch extends GenericSearch {
         int prosperityBUILD2 = Integer.parseInt(build2Params[4]);
 
         return new State(
-            prosperity, food, materials, energy, 100000,
-            foodPrice, materialsPrice, energyPrice,
-            amountRequestFood, delayRequestFood,
-            amountRequestMaterials, delayRequestMaterials,
-            amountRequestEnergy, delayRequestEnergy,
-            priceBUILD1, foodUseBUILD1, materialsUseBUILD1, energyUseBUILD1, prosperityBUILD1,
-            priceBUILD2, foodUseBUILD2, materialsUseBUILD2, energyUseBUILD2, prosperityBUILD2
+            prosperity, food, materials, energy, 1000000
         );
     }
 }
