@@ -1,18 +1,9 @@
-public class State extends Node {
-
+public class State {
     private int prosperity;
     private int food;
     private int materials;
     private int energy;
     private int money;
-
-    public State() {
-        prosperity = 0;
-        food = 0;
-        materials = 0;
-        energy = 0;
-        money = 0;
-    }
 
     public State(int prosperity, int food, int materials, int energy, int money) {
         this.prosperity = prosperity;
@@ -28,7 +19,6 @@ public class State extends Node {
         this.materials = currentState.materials;
         this.energy = currentState.energy;
         this.money = currentState.money;
-        // Copy other state properties
     }
 
     public int getProsperity() {
@@ -71,34 +61,4 @@ public class State extends Node {
         this.money = money;
     }
 
-    // Implement methods to perform actions
-    public State performRequestFood(int amount, int delay) {
-        return new State(this);
-        // Implement the RequestFood action
-    }
-
-    public State performRequestMaterials(int amount, int delay) {
-        return new State(this);
-        // Implement the RequestMaterials action
-    }
-
-    public State performRequestEnergy(int amount, int delay) {
-        return new State(this);
-        // Implement the RequestEnergy action
-    }
-
-    public State performWAIT() {
-        return new State(this);
-        // Implement the WAIT action
-    }
-
-    public State performBUILD1() {
-        return new State(this);
-        // Implement the BUILD1 action
-    }
-
-    public State performBUILD2() {
-        return new State(this);
-        // Implement the BUILD2 action
-    }
 }

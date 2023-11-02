@@ -1,8 +1,33 @@
 import java.util.*;
 
-public class GenericSearch extends State{
+public class GenericSearch{
+    public static int foodPrice = LLAPSearch.foodPrice;
+    public static int materialsPrice = LLAPSearch.materialsPrice;
+    public static int energyPrice = LLAPSearch.energyPrice;
 
-    public static Node search(State initialState, String strategy) {
+    public static int amountRequestFood = LLAPSearch.amountRequestFood;
+    public static int delayRequestFood = LLAPSearch.delayRequestFood;
+
+    public static int amountRequestMaterials = LLAPSearch.amountRequestMaterials;
+    public static int delayRequestMaterials = LLAPSearch.delayRequestMaterials;
+
+    public static int amountRequestEnergy = LLAPSearch.amountRequestEnergy;
+    public static int delayRequestEnergy = LLAPSearch.delayRequestEnergy;
+
+    public static int priceBUILD1 = LLAPSearch.priceBUILD1;
+    public static int foodUseBUILD1 = LLAPSearch.foodUseBUILD1;
+    public static int materialsUseBUILD1 = LLAPSearch.materialsUseBUILD1;
+    public static int energyUseBUILD1 = LLAPSearch.energyUseBUILD1;
+    public static int prosperityBUILD1 = LLAPSearch.prosperityBUILD1;
+
+    public static int priceBUILD2 = LLAPSearch.priceBUILD2;
+    public static int foodUseBUILD2 = LLAPSearch.foodUseBUILD2;
+    public static int materialsUseBUILD2 = LLAPSearch.materialsUseBUILD2;
+    public static int energyUseBUILD2 = LLAPSearch.energyUseBUILD2;
+    public static int prosperityBUILD2 = LLAPSearch.prosperityBUILD2;
+
+
+    public static Node GeneralSearch(State initialState, String strategy) {
 
         Node initialNode = new Node(initialState, null, null);
 
@@ -75,8 +100,7 @@ public class GenericSearch extends State{
     }
 
     private static Node uniformCostSearch(Node initialNode) {
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(expand(initialNode)::getCost));
-        priorityQueue.add(initialNode);
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.getState().getProsperity()));
 
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
@@ -104,12 +128,23 @@ public class GenericSearch extends State{
         return null;
     }
 
-    private static List<Node> expand(Node node) {
-        // Generate successor nodes from the current node
-        // Implement actions and state transitions here
-        List<Node> successors = new ArrayList<>();
-        // Add logic to generate successor nodes
-        return successors;
+    public static List<Node> expand(Node node) {
+        List<Node> children = new ArrayList<>();
+
+        if (node.action.getDelay() > 0){
+            children.add(LLAPSearch.wait(node));
+            children.add(LLAPSearch.build1(node));
+            children.add(LLAPSearch.build2(node));
+        }else if (node.action.getDelay() == 0){
+            children.add(LLAPSearch.requestFood(node));
+            children.add(LLAPSearch.requestMaterials(node));
+            children.add(LLAPSearch.requestEnergy(node));
+            children.add(LLAPSearch.wait(node));
+            children.add(LLAPSearch.build1(node));
+            children.add(LLAPSearch.build2(node));
+        }
+
+        return children;
     }
 
     private static boolean isGoalState(State state) {

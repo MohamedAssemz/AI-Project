@@ -3,12 +3,6 @@ public class Node {
     protected Node parent;
     protected Action action;
 
-    public Node() {
-        state = new State();
-        parent = null;
-        action = null;
-    }
-
     public Node(State state, Node parent, Action action) {
         this.state = state;
         this.parent = parent;
