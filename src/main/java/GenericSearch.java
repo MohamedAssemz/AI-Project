@@ -150,6 +150,7 @@ public class GenericSearch{
         return children;
     }
 
+
     private static boolean isGoalState(State state) {
         // Define the goal state condition
         return state.getProsperity() == 100;
