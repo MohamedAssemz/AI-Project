@@ -26,6 +26,8 @@ public class GenericSearch{
     public static int energyUseBUILD2 = LLAPSearch.energyUseBUILD2;
     public static int prosperityBUILD2 = LLAPSearch.prosperityBUILD2;
 
+    public static boolean visualize = LLAPSearch.visuals;
+
 
     public static Node GeneralSearch(State initialState, String strategy) {
 
@@ -100,7 +102,7 @@ public class GenericSearch{
     }
 
     private static Node uniformCostSearch(Node initialNode) {
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.getState().getProsperity()));
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.getAction().getPrice()));
 
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
@@ -131,17 +133,18 @@ public class GenericSearch{
     public static List<Node> expand(Node node) {
         List<Node> children = new ArrayList<>();
 
-        if (node.action.getDelay() > 0){
+        if (node.action.getDelay() > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0){
             children.add(LLAPSearch.wait(node));
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
-        }else if (node.action.getDelay() == 0){
+        }else if (node.action.getDelay() == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0){
             children.add(LLAPSearch.requestFood(node));
             children.add(LLAPSearch.requestMaterials(node));
             children.add(LLAPSearch.requestEnergy(node));
-            children.add(LLAPSearch.wait(node));
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
+        }else{
+            System.out.println("Not enough resources to perform any action");
         }
 
         return children;
