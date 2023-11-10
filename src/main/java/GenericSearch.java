@@ -66,6 +66,12 @@ public class GenericSearch{
         while (!queue.isEmpty()) {
             Node node = queue.poll();
 
+            if (visualize) {
+                System.out.println("Current node: " + node);
+                System.out.println("Current state: " + node.getState());
+                System.out.println("Remaining nodes in queue: " + queue);
+            }
+
             if (isGoalState(node.getState())) {
                 return node; // Goal state found
             }
@@ -83,6 +89,11 @@ public class GenericSearch{
 
         while (!stack.isEmpty()) {
             Node node = stack.pop();
+            if (visualize) {
+                System.out.println("Current node: " + node);
+                System.out.println("Current state: " + node.getState());
+                System.out.println("Remaining nodes in queue: " + stack);
+            }
 
             if (isGoalState(node.getState())) {
                 return node; // Goal state found
@@ -104,6 +115,12 @@ public class GenericSearch{
           while (!stack.isEmpty()) {
               Node node = stack.pop();
 
+              if (visualize) {
+                System.out.println("Current node: " + node);
+                System.out.println("Current state: " + node.getState());
+                System.out.println("Remaining nodes in queue: " + stack);
+            }
+
               if (isGoalState(node.getState())) {
                   return node; // Goal state found
               }
@@ -124,6 +141,11 @@ public class GenericSearch{
         
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
+            if (visualize) {
+                System.out.println("Current node: " + node);
+                System.out.println("Current state: " + node.getState());
+                System.out.println("Remaining nodes in queue: " + priorityQueue);
+            }
 
             if (isGoalState(node.getState())) {
                 return node; // Goal state found
@@ -144,6 +166,11 @@ public class GenericSearch{
         
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
+             if (visualize) {
+                System.out.println("Current node: " + node);
+                System.out.println("Current state: " + node.getState());
+                System.out.println("Remaining nodes in queue: " + priorityQueue);
+            }
 
             if (isGoalState(node.getState())) {
                 return node; // Goal state found
@@ -165,6 +192,11 @@ public class GenericSearch{
           
           while (!priorityQueue.isEmpty()) {
               Node node = priorityQueue.poll();
+               if (visualize) {
+                System.out.println("Current node: " + node);
+                System.out.println("Current state: " + node.getState());
+                System.out.println("Remaining nodes in queue: " + priorityQueue);
+            }
 
               if (isGoalState(node.getState())) {
                   return node; // Goal state found
