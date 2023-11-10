@@ -270,4 +270,20 @@ public class LLAPSearch extends GenericSearch {
         }
         return null;
     }
+
+    public static void main(String[] args) {
+        String initialState0 = "17;" +
+        "49,30,46;" +
+        "7,57,6;" +
+        "7,1;20,2;29,2;" +
+        "350,10,9,8,28;" +
+        "408,8,12,13,34;";
+
+        Node solution = LLAPSearch.solve(initialState0, "BF", false);
+
+        System.out.println("Solution found!");
+        System.out.println(solution);
+
+	}
+
 }

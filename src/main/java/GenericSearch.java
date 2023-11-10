@@ -31,12 +31,21 @@ public class GenericSearch{
 
     public static Node GeneralSearch(State initialState, String strategy) {
 
-        Node initialNode = new Node(initialState, null, null);
+        Node initialNode = new Node(initialState, null, new Action(
+            "Initialize Node",
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ));
 
-        if (strategy.equals("BFS")) {
+        if (strategy.equals("BF")) {
             return breadthFirstSearch(initialNode);
         } 
-        else if (strategy.equals("DFS")) {
+        else if (strategy.equals("DF")) {
             return depthFirstSearch(initialNode);
         }
         else if (strategy.equals("ID")) {
@@ -267,9 +276,9 @@ public class GenericSearch{
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
         }
+
         for (int i =0;i<children.size();i++) {
-        	Node Current =children.get(i);
-        	Current.depth=node.depth+1;
+        	children.get(i).depth = node.depth+1;
         }
        
         return children;
