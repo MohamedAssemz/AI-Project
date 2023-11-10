@@ -2,12 +2,14 @@ public class Node {
     protected State state;
     protected Node parent;
     protected Action action;
+    protected int depth;
 
     public Node(State state, Node parent, Action action) {
         this.state = state;
         this.parent = parent;
-        this.action = action;
-    }
+        this.action = action; 
+        
+        }
 
     public State getState() {
         return state;

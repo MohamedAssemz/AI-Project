@@ -94,14 +94,32 @@ public class GenericSearch{
     }
 
     private static Node iterativeDeepeningSearch(Node initialNode) {
-        // Implement iterative deepening search
-        // You'll need to repeatedly perform depth-first searches with increasing depth limits
-        return null;
+    	  Stack<Node> stack = new Stack<>();
+          stack.push(initialNode);
+           int currentDepth=0;
+  
+       while(true) {
+          while (!stack.isEmpty()) {
+              Node node = stack.pop();
+
+              if (isGoalState(node.getState())) {
+                  return node; // Goal state found
+              }
+               if (node.depth<currentDepth) {
+              List<Node> successors = expand(node);
+              stack.addAll(successors);
+               }
+           }
+           currentDepth+=1;
+       }
+
+          
     }
 
     private static Node uniformCostSearch(Node initialNode) {
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.getState().getProsperity()));
-
+        priorityQueue.add(initialNode);
+        
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
 
@@ -119,14 +137,87 @@ public class GenericSearch{
     private static Node greedySearch(Node initialNode, int heuristicIndex) {
         // Implement greedy search with the specified heuristic
         // You'll need to use a priority queue based on the heuristic value
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> heuristic1(node)));
+        priorityQueue.add(initialNode);
+        
+        while (!priorityQueue.isEmpty()) {
+            Node node = priorityQueue.poll();
+
+            if (isGoalState(node.getState())) {
+                return node; // Goal state found
+            }
+
+            List<Node> successors = expand(node);
+            priorityQueue.addAll(successors);
+        }
+    	
+    	
         return null;
     }
 
     private static Node aStarSearch(Node initialNode, int heuristicIndex) {
         // Implement A* search with the specified heuristic
         // You'll need to use a priority queue based on the sum of the path cost and heuristic value
-        return null;
+   PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> getPathCost(node)+heuristic1(node)));
+          priorityQueue.add(initialNode);
+          
+          while (!priorityQueue.isEmpty()) {
+              Node node = priorityQueue.poll();
+
+              if (isGoalState(node.getState())) {
+                  return node; // Goal state found
+              }
+
+              List<Node> successors = expand(node);
+              priorityQueue.addAll(successors);
+          }
+      	
+      	
+          return null;
+    	
     }
+    public static int getPathCost(Node currentNode) {
+    	int cost=0;
+    	while (currentNode.depth!=0) {
+    		cost+=currentNode.action.getPrice();
+    		currentNode=currentNode.parent;  		
+    		
+    	}
+    	// cost for the root node action
+    	cost+=currentNode.action.getPrice();
+    	return cost;
+    	
+    	
+    	
+    }
+    
+    
+    private static int heuristic1(Node currentNode) {
+    	// the heuristic assumes that the minimum cost to reach p.level=100 is the price of the min. build actions 
+    	// to reach that level of prosperity
+    	
+    	// prosperity difference 
+    	int prosDiff=100-currentNode.state.getProsperity();
+    	//minimum No. of builds 
+    	int minBuild;
+    	// minimum cost needed 
+    	int minCost;
+    	
+    	if(prosperityBUILD1>prosperityBUILD2) {
+           minBuild=prosDiff/prosperityBUILD1;
+     	   minCost=minBuild*(priceBUILD1+foodUseBUILD1+materialsUseBUILD1+energyUseBUILD1);
+
+    	}
+    	else {
+    	  minBuild=prosDiff/prosperityBUILD2;
+    	  minCost=minBuild*(priceBUILD2+foodUseBUILD2+materialsUseBUILD2+energyUseBUILD2);
+    	}
+    	return minCost;
+    	
+    	
+    	
+    }
+    
 
     public static List<Node> expand(Node node) {
         List<Node> children = new ArrayList<>();
@@ -143,7 +234,11 @@ public class GenericSearch{
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
         }
-
+        for (int i =0;i<children.size();i++) {
+        	Node Current =children.get(i);
+        	Current.depth=node.depth+1;
+        }
+       
         return children;
     }
 
