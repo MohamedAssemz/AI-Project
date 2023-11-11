@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
 public class LLAPSearch extends GenericSearch {
 
@@ -36,6 +39,8 @@ public class LLAPSearch extends GenericSearch {
     public static Node solve(String initialState, String strategy, boolean visualize) {
         visuals = visualize;
         State initial = parseInitialState(initialState);
+        System.out.println("HI" + initial.getProsperity());
+
         return GeneralSearch(initial, strategy);
     }
 
@@ -80,7 +85,7 @@ public class LLAPSearch extends GenericSearch {
         prosperityBUILD2 = Integer.parseInt(build2Params[4]);
 
         return new State(
-            prosperity, food, materials, energy, 1000000
+            prosperity, food, materials, energy, 100000
         );
     }
 
@@ -111,7 +116,8 @@ public class LLAPSearch extends GenericSearch {
                     -1,
                     -1,
                     0
-                )
+                ),
+                node.getDepth() + 1
             );
         }
         foodTB = amountRequestFood;;
@@ -138,7 +144,8 @@ public class LLAPSearch extends GenericSearch {
                     -1,
                     -1,
                     0
-                )
+                ),
+                node.getDepth() + 1
             );
         }
         materialsTB = amountRequestMaterials;
@@ -165,7 +172,8 @@ public class LLAPSearch extends GenericSearch {
                     -1,
                     -1,
                     0
-                )
+                ),
+                node.getDepth() + 1
             );
         }
         energyTB = amountRequestEnergy;
@@ -199,7 +207,8 @@ public class LLAPSearch extends GenericSearch {
                 tempM - 1,
                 tempE - 1,
                 0
-            )
+            ),
+            node.getDepth() + 1
         );
     }
 
@@ -231,7 +240,8 @@ public class LLAPSearch extends GenericSearch {
                     materialsUseBUILD1,
                     energyUseBUILD1,
                     prosperityBUILD1
-                )
+                ),
+                node.getDepth() + 1
             );
         }
         return null;
@@ -265,7 +275,9 @@ public class LLAPSearch extends GenericSearch {
                     materialsUseBUILD2,
                     energyUseBUILD2,
                     prosperityBUILD2
-                )
+                ),
+                node.getDepth() + 1
+                
             );
         }
         return null;
@@ -279,10 +291,15 @@ public class LLAPSearch extends GenericSearch {
         "350,10,9,8,28;" +
         "408,8,12,13,34;";
 
-        Node solution = LLAPSearch.solve(initialState0, "BF", false);
+
+        Node solution = solve(initialState0, "BF", false);
 
         System.out.println("Solution found!");
-        System.out.println(solution);
+        System.out.println(solution.getState().getMoney());
+        System.out.println(solution.getState().getProsperity());
+
+        //LLAPPlanChecker pc = new LLAPPlanChecker(initialState0);
+		//assertTrue("The output actions do not lead to a goal state.", pc.applyPlan(initialState0, solution));
 
 	}
 

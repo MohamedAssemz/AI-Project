@@ -40,7 +40,9 @@ public class GenericSearch{
             0,
             0,
             0
-        ));
+        ),
+        0
+        );
 
         if (strategy.equals("BF")) {
             return breadthFirstSearch(initialNode);
@@ -80,13 +82,33 @@ public class GenericSearch{
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + queue);
             }
+            if(node!=null){
+                if (isGoalState(node.getState()) ) {
+                    Node temp = node;
+                    int cost = 0;
+                    String plan = "";
+                    List<String> nodes = new LinkedList<>(); 
+            
+                    String answer = "";
+            
+                    while(node != null){
+                        cost = cost + node.getAction().getPrice();
+                        plan = plan + "," + node.getAction().getName();
+                        nodes.add(0, node.toString());
+                        node = node.parent;
+                    }
+            
+                    answer = plan + "," + cost + "," + nodes; 
 
-            if (isGoalState(node.getState())) {
-                return node; // Goal state found
+                    System.out.println(answer);
+
+                    return temp; // Goal state found
+                }
+            
+                List<Node> successors = expand(node);
+                queue.addAll(successors);
             }
-
-            List<Node> successors = expand(node);
-            queue.addAll(successors);
+            
         }
 
         return null; // Goal state not found
@@ -103,13 +125,32 @@ public class GenericSearch{
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + stack);
             }
+            if(node!=null){
+                if (isGoalState(node.getState())) {
+                    Node temp = node;
+                    int cost = 0;
+                    String plan = "";
+                    Stack<Node> nodes = new Stack<>(); 
+            
+                    String answer = "";
+            
+                    while(node.getParent() != null){
+                        cost = cost + node.getAction().getPrice();
+                        plan = plan + node.getAction().getName();
+                        nodes.add(node);
+                        node = node.parent;
+                    }
+            
+                    answer = cost + "" + plan + "" + nodes; 
 
-            if (isGoalState(node.getState())) {
-                return node; // Goal state found
+                    System.out.println(answer);
+
+                    return temp; // Goal state found
+                }
+
+                List<Node> successors = expand(node);
+                stack.addAll(successors);
             }
-
-            List<Node> successors = expand(node);
-            stack.addAll(successors);
         }
 
         return null; // Goal state not found
@@ -155,13 +196,14 @@ public class GenericSearch{
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + priorityQueue);
             }
-
+            if(node!=null){
             if (isGoalState(node.getState())) {
                 return node; // Goal state found
             }
 
             List<Node> successors = expand(node);
             priorityQueue.addAll(successors);
+        }
         }
 
         return null; // Goal state not found
@@ -265,28 +307,29 @@ public class GenericSearch{
     public static List<Node> expand(Node node) {
         List<Node> children = new ArrayList<>();
 
-        if (node.action.getDelay() > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0){
+        if (node!=null && node.action.getDelay() > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
             children.add(LLAPSearch.wait(node));
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
-        }else if (node.action.getDelay() == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0){
+        }else if (node!=null && node.action.getDelay() == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
             children.add(LLAPSearch.requestFood(node));
             children.add(LLAPSearch.requestMaterials(node));
             children.add(LLAPSearch.requestEnergy(node));
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
         }
-
-        for (int i =0;i<children.size();i++) {
-        	children.get(i).depth = node.depth+1;
+        for(int i=0; i<children.size(); i++){
+            if(children.get(i)==null){
+                children.remove(children.get(i));
+            }
         }
-       
+       System.out.println("Level: "+ node.getState().getProsperity());
         return children;
     }
 
 
     private static boolean isGoalState(State state) {
         // Define the goal state condition
-        return state.getProsperity() == 100;
+        return state.getProsperity() >= 100;
     }
 }
