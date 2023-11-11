@@ -27,7 +27,7 @@ public class GenericSearch{
     public static int prosperityBUILD2 = LLAPSearch.prosperityBUILD2;
 
     public static boolean visualize = LLAPSearch.visuals;
-
+  public static  int currentDepth;
 
     public static Node GeneralSearch(State initialState, String strategy) {
 
@@ -122,10 +122,11 @@ public class GenericSearch{
 
     private static Node iterativeDeepeningSearch(Node initialNode) {
         Stack<Node> stack = new Stack<>();
-        stack.push(initialNode);
-        int currentDepth=0;
+        currentDepth = 0;
   
        while(true) {
+                stack.push(initialNode);
+
           while (!stack.isEmpty()) {
             Node node = stack.pop();
 
@@ -135,19 +136,19 @@ public class GenericSearch{
                 System.out.println("Remaining nodes in queue: " + stack);
             }
 
-            if (isGoalState(node.getState())) {
-                return node; // Goal state found
-            }
-            
-            if (node.depth<currentDepth) {
+             if(node!=null){
+                if (isGoalState(node.getState())) {
+                    return node; // Goal state found
+                }
+
                 List<Node> successors = expand(node);
                 stack.addAll(successors);
             }
            }
            currentDepth+=1;
-           if(stack.empty()){
-            return null;
-           }
+        //    if(stack.empty()){
+        //     return null;
+        //    }
        }
     }
 
