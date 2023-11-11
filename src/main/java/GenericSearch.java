@@ -84,25 +84,7 @@ public class GenericSearch{
             }
             if(node!=null){
                 if (isGoalState(node.getState()) ) {
-                    Node temp = node;
-                    int cost = 0;
-                    String plan = "";
-                    List<String> nodes = new LinkedList<>(); 
-            
-                    String answer = "";
-            
-                    while(node != null){
-                        cost = cost + node.getAction().getPrice();
-                        plan = plan + "," + node.getAction().getName();
-                        nodes.add(0, node.toString());
-                        node = node.parent;
-                    }
-            
-                    answer = plan + "," + cost + "," + nodes; 
-
-                    System.out.println(answer);
-
-                    return temp; // Goal state found
+                    return node; // Goal state found
                 }
             
                 List<Node> successors = expand(node);
@@ -127,25 +109,7 @@ public class GenericSearch{
             }
             if(node!=null){
                 if (isGoalState(node.getState())) {
-                    Node temp = node;
-                    int cost = 0;
-                    String plan = "";
-                    Stack<Node> nodes = new Stack<>(); 
-            
-                    String answer = "";
-            
-                    while(node.getParent() != null){
-                        cost = cost + node.getAction().getPrice();
-                        plan = plan + node.getAction().getName();
-                        nodes.add(node);
-                        node = node.parent;
-                    }
-            
-                    answer = cost + "" + plan + "" + nodes; 
-
-                    System.out.println(answer);
-
-                    return temp; // Goal state found
+                    return node; // Goal state found
                 }
 
                 List<Node> successors = expand(node);
@@ -157,32 +121,34 @@ public class GenericSearch{
     }
 
     private static Node iterativeDeepeningSearch(Node initialNode) {
-    	  Stack<Node> stack = new Stack<>();
-          stack.push(initialNode);
-           int currentDepth=0;
+        Stack<Node> stack = new Stack<>();
+        stack.push(initialNode);
+        int currentDepth=0;
   
        while(true) {
           while (!stack.isEmpty()) {
-              Node node = stack.pop();
+            Node node = stack.pop();
 
-              if (visualize) {
+            if (visualize) {
                 System.out.println("Current node: " + node);
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + stack);
             }
 
-              if (isGoalState(node.getState())) {
-                  return node; // Goal state found
-              }
-               if (node.depth<currentDepth) {
-              List<Node> successors = expand(node);
-              stack.addAll(successors);
-               }
+            if (isGoalState(node.getState())) {
+                return node; // Goal state found
+            }
+            
+            if (node.depth<currentDepth) {
+                List<Node> successors = expand(node);
+                stack.addAll(successors);
+            }
            }
            currentDepth+=1;
+           if(stack.empty()){
+            return null;
+           }
        }
-
-          
     }
 
     private static Node uniformCostSearch(Node initialNode) {

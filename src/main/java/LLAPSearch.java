@@ -2,6 +2,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+
 public class LLAPSearch extends GenericSearch {
 
         public static int foodPrice;
@@ -36,12 +37,29 @@ public class LLAPSearch extends GenericSearch {
 
         public static boolean visuals;
 
-    public static Node solve(String initialState, String strategy, boolean visualize) {
+    public static String solve(String initialState, String strategy, boolean visualize) {
         visuals = visualize;
         State initial = parseInitialState(initialState);
         System.out.println("HI" + initial.getProsperity());
 
-        return GeneralSearch(initial, strategy);
+        Node node = GeneralSearch(initial, strategy);
+
+        int cost = 0;
+        String plan = "";
+        List<String> nodes = new LinkedList<>(); 
+
+        String answer = "";
+
+        while(node != null){
+            cost = cost + node.getAction().getPrice();
+            plan = plan + "," + node.getAction().getName();
+            nodes.add(0, node.toString());
+            node = node.parent;
+        }
+
+        answer = plan + "," + cost + "," + nodes; 
+
+        return answer;
     }
 
     private static State parseInitialState(String initialState) {
@@ -292,11 +310,10 @@ public class LLAPSearch extends GenericSearch {
         "408,8,12,13,34;";
 
 
-        Node solution = solve(initialState0, "BF", false);
+        String solution = solve(initialState0, "ID", false);
 
         System.out.println("Solution found!");
-        System.out.println(solution.getState().getMoney());
-        System.out.println(solution.getState().getProsperity());
+        System.out.println(solution);
 
         //LLAPPlanChecker pc = new LLAPPlanChecker(initialState0);
 		//assertTrue("The output actions do not lead to a goal state.", pc.applyPlan(initialState0, solution));
