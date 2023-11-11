@@ -28,8 +28,25 @@ public class GenericSearch{
 
     public static boolean visualize = LLAPSearch.visuals;
 
+    
+    public static Map<Node, Boolean> visitedStates = new HashMap<>();
+
+
+    public static boolean isStateVisited(Node node) {
+        return visitedStates.containsKey(node);
+    }
+
+    public static void markStateVisited(Node node) {
+        visitedStates.put(node, true);
+    }
+
+    public static void clearVisitedStates() {
+        visitedStates.clear();
+    }
+
 
     public static Node GeneralSearch(State initialState, String strategy) {
+
 
         Node initialNode = new Node(initialState, null, new Action(
             "Initialize Node",
@@ -82,9 +99,11 @@ public class GenericSearch{
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + queue);
             }
-            if(node!=null){
+            if(node!=null && !isStateVisited(node)){
                 if (isGoalState(node.getState()) ) {
                     return node; // Goal state found
+                }else{
+                    markStateVisited(node);
                 }
             
                 List<Node> successors = expand(node);
@@ -107,9 +126,11 @@ public class GenericSearch{
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + stack);
             }
-            if(node!=null){
+            if(node!=null && !isStateVisited(node)){
                 if (isGoalState(node.getState())) {
                     return node; // Goal state found
+                }else{
+                    markStateVisited(node);
                 }
 
                 List<Node> successors = expand(node);
@@ -152,7 +173,11 @@ public class GenericSearch{
     }
 
     private static Node uniformCostSearch(Node initialNode) {
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.getState().getProsperity()));
+
+        Comparator<Node> priceComparator = Comparator.comparingInt(Node::getPathCost);
+
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(priceComparator);
+
         priorityQueue.add(initialNode);
         
         while (!priorityQueue.isEmpty()) {
@@ -162,11 +187,13 @@ public class GenericSearch{
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + priorityQueue);
             }
-            if(node!=null){
+            if(node!=null && !isStateVisited(node)){
             if (isGoalState(node.getState())) {
                 return node; // Goal state found
+            }else{
+                markStateVisited(node);
             }
-
+            
             List<Node> successors = expand(node);
             priorityQueue.addAll(successors);
         }
@@ -289,7 +316,14 @@ public class GenericSearch{
                 children.remove(children.get(i));
             }
         }
-       System.out.println("Level: "+ node.getState().getProsperity());
+
+        for(int i=0; i<children.size(); i++){
+            if(isStateVisited(children.get(i))){
+                children.remove(children.get(i));
+            }
+        }
+
+        System.out.println("Level: "+ node.getState().getProsperity());
         return children;
     }
 

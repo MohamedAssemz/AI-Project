@@ -40,19 +40,18 @@ public class LLAPSearch extends GenericSearch {
     public static String solve(String initialState, String strategy, boolean visualize) {
         visuals = visualize;
         State initial = parseInitialState(initialState);
-        System.out.println("HI" + initial.getProsperity());
 
         Node node = GeneralSearch(initial, strategy);
 
         int cost = 0;
-        String plan = "";
         List<String> nodes = new LinkedList<>(); 
+        List<String> plan = new LinkedList<>();
 
         String answer = "";
 
         while(node != null){
             cost = cost + node.getAction().getPrice();
-            plan = plan + "," + node.getAction().getName();
+            plan.add(0, node.getAction().getName());
             nodes.add(0, node.toString());
             node = node.parent;
         }
@@ -310,10 +309,11 @@ public class LLAPSearch extends GenericSearch {
         "408,8,12,13,34;";
 
 
-        String solution = solve(initialState0, "ID", false);
+        String solution = solve(initialState0, "UC", false);
 
         System.out.println("Solution found!");
         System.out.println(solution);
+        System.out.println(visitedStates);
 
         //LLAPPlanChecker pc = new LLAPPlanChecker(initialState0);
 		//assertTrue("The output actions do not lead to a goal state.", pc.applyPlan(initialState0, solution));

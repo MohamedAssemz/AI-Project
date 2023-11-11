@@ -49,4 +49,8 @@ public class Node {
     public void setAction(Action action) {
         this.action = action;
     }
+
+    public int getPathCost() {
+        return this.getAction().getPrice();
+    }
 }
