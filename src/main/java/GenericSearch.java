@@ -93,6 +93,7 @@ public class GenericSearch{
 
         while (!queue.isEmpty()) {
             Node node = queue.poll();
+            System.out.println("Level: "+ node.getState().getProsperity());
             
 
             if (visualize) {
@@ -121,7 +122,10 @@ public class GenericSearch{
         stack.push(initialNode);
 
         while (!stack.isEmpty()) {
+            System.out.println("Q: "+ stack);
             Node node = stack.pop();
+            System.out.println("Level: "+ node.getState().getProsperity());
+
             if (visualize) {
                 System.out.println("Current node: " + node);
                 System.out.println("Current state: " + node.getState());
@@ -131,7 +135,7 @@ public class GenericSearch{
                 if (isGoalState(node.getState())) {
                     return node; // Goal state found
                 }
-                
+
                 markStateVisited(node);
 
                 List<Node> successors = expand(node);
@@ -144,13 +148,13 @@ public class GenericSearch{
 
     private static Node iterativeDeepeningSearch(Node initialNode) {
         Stack<Node> stack = new Stack<>();
+        stack.push(initialNode);
         currentDepth = 0;
   
        while(true) {
-                stack.push(initialNode);
-
           while (!stack.isEmpty()) {
             Node node = stack.pop();
+            System.out.println("Level: "+ node.getState().getProsperity());
 
             if (visualize) {
                 System.out.println("Current node: " + node);
@@ -181,9 +185,11 @@ public class GenericSearch{
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(priceComparator);
 
         priorityQueue.add(initialNode);
-        
+
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
+            System.out.println("Level: "+ node.getState().getProsperity());
+
             if (visualize) {
                 System.out.println("Current node: " + node);
                 System.out.println("Current state: " + node.getState());
@@ -302,21 +308,16 @@ public class GenericSearch{
         }
         for(int i=0; i<children.size(); i++){
             if(children.get(i)==null){
-                children.remove(children.get(i));
+                children.remove(i);
             }
         }
-
-        System.out.println("Children: "+ children.size());
 
         for(int i=0; i<children.size(); i++){
             if(isStateVisited(children.get(i))){
-                children.remove(children.get(i));
+                children.remove(i);
             }
         }
-
-        System.out.println("Children: "+ children.size());
-
-        System.out.println("Level: "+ node.getState().getProsperity());
+       
         return children;
     }
 

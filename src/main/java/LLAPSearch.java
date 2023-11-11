@@ -309,7 +309,7 @@ public class LLAPSearch extends GenericSearch {
         "408,8,12,13,34;";
 
 
-        String solution = solve(initialState0, "BF", false);
+        String solution = solve(initialState0, "DF", false);
 
         System.out.println("Solution found!");
         System.out.println(solution);
