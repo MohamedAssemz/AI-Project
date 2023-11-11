@@ -114,7 +114,7 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node requestFood(Node node) {
-        if (node.state.getFood() < 50) {
+        if (node.state.getFood() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -142,7 +142,7 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node requestMaterials(Node node) {
-        if (node.state.getMaterials() < 50) {
+        if (node.state.getMaterials() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -170,7 +170,7 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node requestEnergy(Node node){
-        if (node.state.getEnergy() < 50) {
+        if (node.state.getEnergy() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -218,7 +218,7 @@ public class LLAPSearch extends GenericSearch {
             new Action(
                 "Wait",
                 0,
-                min(node.action.getDelay() - 1,0),
+                node.action.getDelay() - 1,
                 energyPrice + foodPrice + materialsPrice,
                 tempF - 1,
                 tempM - 1,
@@ -238,7 +238,7 @@ public class LLAPSearch extends GenericSearch {
         materialsTB = 0;
         energyTB = 0;
 
-        if (node.state.getFood() >= foodUseBUILD1 && node.state.getMaterials() >= materialsUseBUILD1 && node.state.getEnergy() >= energyUseBUILD1 && node.state.getMoney() >= priceBUILD1) {
+        if (node.state.getFood() >= foodUseBUILD1 && node.state.getMaterials() >= materialsUseBUILD1 && node.state.getEnergy() >= energyUseBUILD1 && node.state.getMoney() >= (priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice))) {
             return new Node(
                 new State(
                     node.state.getProsperity() + prosperityBUILD1,
@@ -251,7 +251,7 @@ public class LLAPSearch extends GenericSearch {
                 new Action(
                     "Build 1",
                     1,
-                    1,
+                    node.action.getDelay() - 1,
                     priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice),
                     foodUseBUILD1,
                     materialsUseBUILD1,
@@ -273,7 +273,7 @@ public class LLAPSearch extends GenericSearch {
         materialsTB = 0;
         energyTB = 0;
 
-        if (node.state.getFood() >= foodUseBUILD2 && node.state.getMaterials() >= materialsUseBUILD2 && node.state.getEnergy() >= energyUseBUILD2 && node.state.getMoney() >= priceBUILD1) {
+        if (node.state.getFood() >= foodUseBUILD2 && node.state.getMaterials() >= materialsUseBUILD2 && node.state.getEnergy() >= energyUseBUILD2 && node.state.getMoney() >= (priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice))) {
             return new Node(
                 new State(
                     node.state.getProsperity() + prosperityBUILD2,
@@ -286,7 +286,7 @@ public class LLAPSearch extends GenericSearch {
                 new Action(
                     "Build 2",
                     1,
-                    1,
+                    node.action.getDelay() - 1,
                     priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice),
                     foodUseBUILD2,
                     materialsUseBUILD2,
@@ -309,11 +309,11 @@ public class LLAPSearch extends GenericSearch {
         "408,8,12,13,34;";
 
 
-        String solution = solve(initialState0, "UC", false);
+        String solution = solve(initialState0, "BF", false);
 
         System.out.println("Solution found!");
         System.out.println(solution);
-        System.out.println(visitedStates);
+        System.out.println(visitedStates.size());
 
         //LLAPPlanChecker pc = new LLAPPlanChecker(initialState0);
 		//assertTrue("The output actions do not lead to a goal state.", pc.applyPlan(initialState0, solution));

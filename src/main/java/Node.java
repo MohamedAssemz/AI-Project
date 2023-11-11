@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Node {
     protected State state;
     protected Node parent;
@@ -51,6 +53,29 @@ public class Node {
     }
 
     public int getPathCost() {
-        return this.getAction().getPrice();
+        Node temp = this;
+    	int cost=0;
+    	while (temp.depth!=0) {
+    		cost+=temp.action.getPrice();
+    		temp=temp.parent;  			
+    	}
+    	// cost for the root node action
+    	cost+=temp.action.getPrice();
+    	return cost;
+    }
+
+        @Override
+    public int hashCode() {
+        return Objects.hash(state);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
