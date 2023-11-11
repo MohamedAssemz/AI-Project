@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GenericSearch{
     public static int foodPrice = LLAPSearch.foodPrice;
@@ -27,7 +28,7 @@ public class GenericSearch{
     public static int prosperityBUILD2 = LLAPSearch.prosperityBUILD2;
 
     public static boolean visualize = LLAPSearch.visuals;
-    public static  int currentDepth;
+  public static  int currentDepth;
     
     public static Map<Node, Boolean> visitedStates = new HashMap<>();
 
@@ -93,7 +94,6 @@ public class GenericSearch{
 
         while (!queue.isEmpty()) {
             Node node = queue.poll();
-            
 
             if (visualize) {
                 System.out.println("Current node: " + node);
@@ -103,10 +103,10 @@ public class GenericSearch{
             if(node!=null && !isStateVisited(node)){
                 if (isGoalState(node.getState()) ) {
                     return node; // Goal state found
-                }    
-                
-                markStateVisited(node);
-
+                }else{
+                    markStateVisited(node);
+                }
+            
                 List<Node> successors = expand(node);
                 queue.addAll(successors);
             }
@@ -130,9 +130,9 @@ public class GenericSearch{
             if(node!=null && !isStateVisited(node)){
                 if (isGoalState(node.getState())) {
                     return node; // Goal state found
+                }else{
+                    markStateVisited(node);
                 }
-                
-                markStateVisited(node);
 
                 List<Node> successors = expand(node);
                 stack.addAll(successors);
@@ -176,9 +176,9 @@ public class GenericSearch{
 
     private static Node uniformCostSearch(Node initialNode) {
 
-        Comparator<Node> priceComparator = Comparator.comparingInt(Node::getPathCost);
+        //Comparator<Node> priceComparator = Comparator.comparingInt(Node::getPathCost);
 
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(priceComparator);
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(new NodeComparator());
 
         priorityQueue.add(initialNode);
         
@@ -189,16 +189,22 @@ public class GenericSearch{
                 System.out.println("Current state: " + node.getState());
                 System.out.println("Remaining nodes in queue: " + priorityQueue);
             }
-            if(node!=null && !isStateVisited(node)){
+            if (!node.equals(null)){
+            if( !isStateVisited(node)){
                 if (isGoalState(node.getState())) {
                     return node; // Goal state found
                 }else{
                     markStateVisited(node);
                 }
-                System.out.println(visitedStates.size());
-                List<Node> successors = expand(node);
-                priorityQueue.addAll(successors);
+            
+            List<Node> successors = expand(node);
+            if (successors != null) {
+                // Filter out null elements before adding to the PriorityQueue
+                priorityQueue.addAll(successors.stream().filter(Objects::nonNull).collect(Collectors.toList()));
             }
+            }
+        
+        }
         }
 
         return null; // Goal state not found
@@ -233,7 +239,7 @@ public class GenericSearch{
     private static Node aStarSearch(Node initialNode, int heuristicIndex) {
         // Implement A* search with the specified heuristic
         // You'll need to use a priority queue based on the sum of the path cost and heuristic value
-   PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> heuristic1(node)));
+   PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> getPathCost(node)+heuristic1(node)));
           priorityQueue.add(initialNode);
           
           while (!priorityQueue.isEmpty()) {
@@ -256,7 +262,20 @@ public class GenericSearch{
           return null;
     	
     }
-
+    public static int getPathCost(Node currentNode) {
+    	int cost=0;
+    	while (currentNode.depth!=0) {
+    		cost+=currentNode.action.getPrice();
+    		currentNode=currentNode.parent;  		
+    		
+    	}
+    	// cost for the root node action
+    	cost+=currentNode.action.getPrice();
+    	return cost;
+    	
+    	
+    	
+    }
     
     
     private static int heuristic1(Node currentNode) {
@@ -306,15 +325,11 @@ public class GenericSearch{
             }
         }
 
-        System.out.println("Children: "+ children.size());
-
         for(int i=0; i<children.size(); i++){
             if(isStateVisited(children.get(i))){
                 children.remove(children.get(i));
             }
         }
-
-        System.out.println("Children: "+ children.size());
 
         System.out.println("Level: "+ node.getState().getProsperity());
         return children;
