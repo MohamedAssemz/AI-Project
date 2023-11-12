@@ -188,7 +188,7 @@ public class GenericSearch{
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
 
-            if (!node.equals(null)){
+            if (node!=null){
             if( !isStateVisited(node.toString())){
                 if (isGoalState(node.getState())) {
                     return node; // Goal state found

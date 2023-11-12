@@ -319,7 +319,7 @@ public class LLAPSearch extends GenericSearch {
         "691,7,8,6,15;";
 
 
-        String solution = solve(initialState0, "ID", true);
+        String solution = solve(initialState0, "BF", true);
 
         System.out.println(solution);
         System.out.println("Visited Nodes: " + visitedStates.size());
