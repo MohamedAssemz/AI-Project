@@ -35,7 +35,7 @@ public class LLAPSearch extends GenericSearch {
         public static int materialsTB = 0;
         public static int energyTB = 0;
 
-        public static boolean visuals;
+        public static boolean visuals = false;
 
     public static String solve(String initialState, String strategy, boolean visualize) {
         visuals = visualize;
@@ -124,6 +124,7 @@ public class LLAPSearch extends GenericSearch {
 
     public static Node requestFood(Node node) {
         if (node.state.getFood() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
+            foodTB = amountRequestFood;
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -146,12 +147,12 @@ public class LLAPSearch extends GenericSearch {
                 node.getDepth() + 1
             );
         }
-        foodTB = amountRequestFood;;
         return null;
     }
 
     public static Node requestMaterials(Node node) {
         if (node.state.getMaterials() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
+            materialsTB = amountRequestMaterials;
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -174,12 +175,12 @@ public class LLAPSearch extends GenericSearch {
                 node.getDepth() + 1
             );
         }
-        materialsTB = amountRequestMaterials;
         return null;
     }
 
     public static Node requestEnergy(Node node){
         if (node.state.getEnergy() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
+            energyTB = amountRequestEnergy;
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -202,7 +203,7 @@ public class LLAPSearch extends GenericSearch {
                 node.getDepth() + 1
             );
         }
-        energyTB = amountRequestEnergy;
+        
         return null;
     }
 
@@ -318,7 +319,7 @@ public class LLAPSearch extends GenericSearch {
         "691,7,8,6,15;";
 
 
-        String solution = solve(initialState0, "ID", false);
+        String solution = solve(initialState0, "ID", true);
 
         System.out.println(solution);
         System.out.println("Visited Nodes: " + visitedStates.size());
