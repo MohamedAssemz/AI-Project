@@ -42,21 +42,30 @@ public class LLAPSearch extends GenericSearch {
         State initial = parseInitialState(initialState);
 
         Node node = GeneralSearch(initial, strategy);
-
-        int cost = 0;
-        List<String> nodes = new LinkedList<>(); 
-        List<String> plan = new LinkedList<>();
-
         String answer = "";
 
-        while(node != null){
-            cost = cost + node.getAction().getPrice();
-            plan.add(0, node.getAction().getName());
-            nodes.add(0, node.toString());
-            node = node.parent;
-        }
+        if(node == null){
+            answer = "No Solution Found!";
+            return answer;
+        }else if(node != null){
 
-        answer = plan + "," + cost + "," + nodes; 
+            int cost = 0;
+            List<String> nodes = new LinkedList<>(); 
+            List<String> plan = new LinkedList<>();
+
+            
+
+            while(node != null){
+                cost = cost + node.getAction().getPrice();
+                plan.add(0, node.getAction().getName());
+                nodes.add(0, node.toString());
+                node = node.parent;
+            }
+
+            answer = plan + "," + cost + "," + nodes; 
+            System.out.println("Solution Found!");
+
+        }
 
         return answer;
     }
@@ -301,19 +310,18 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static void main(String[] args) {
-        String initialState0 = "17;" +
-        "49,30,46;" +
-        "7,57,6;" +
-        "7,1;20,2;29,2;" +
-        "350,10,9,8,28;" +
-        "408,8,12,13,34;";
+        String initialState0 = "30;" +
+        "30,25,19;" +
+        "90,120,150;" +
+        "9,2;13,1;11,1;" +
+        "3195,11,12,10,34;" +
+        "691,7,8,6,15;";
 
 
-        String solution = solve(initialState0, "UC", false);
+        String solution = solve(initialState0, "ID", false);
 
-        System.out.println("Solution found!");
         System.out.println(solution);
-        System.out.println(visitedStates.size());
+        System.out.println("Visited Nodes: " + visitedStates.size());
 
         //LLAPPlanChecker pc = new LLAPPlanChecker(initialState0);
 		//assertTrue("The output actions do not lead to a goal state.", pc.applyPlan(initialState0, solution));

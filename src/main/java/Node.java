@@ -63,19 +63,4 @@ public class Node {
     	cost+=temp.action.getPrice();
     	return cost;
     }
-
-        @Override
-    public int hashCode() {
-        return Objects.hash(state);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
 }
