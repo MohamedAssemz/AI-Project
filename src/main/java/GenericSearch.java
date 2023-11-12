@@ -94,7 +94,6 @@ public class GenericSearch{
 
         while (!queue.isEmpty()) {
             Node node = queue.poll();
-            System.out.println("Level: "+ node.getState().getProsperity());
 
             if (visualize) {
                 System.out.println("Current node: " + node);
@@ -104,9 +103,9 @@ public class GenericSearch{
             if(node!=null && !isStateVisited(node)){
                 if (isGoalState(node.getState()) ) {
                     return node; // Goal state found
-                }else{
-                    markStateVisited(node);
                 }
+
+                markStateVisited(node);
             
                 List<Node> successors = expand(node);
                 queue.addAll(successors);
@@ -122,9 +121,7 @@ public class GenericSearch{
         stack.push(initialNode);
 
         while (!stack.isEmpty()) {
-            System.out.println("Q: "+ stack);
             Node node = stack.pop();
-            System.out.println("Level: "+ node.getState().getProsperity());
 
             if (visualize) {
                 System.out.println("Current node: " + node);
@@ -134,8 +131,6 @@ public class GenericSearch{
             if(node!=null && !isStateVisited(node)){
                 if (isGoalState(node.getState())) {
                     return node; // Goal state found
-                }else{
-                    markStateVisited(node);
                 }
 
                 markStateVisited(node);
@@ -156,7 +151,6 @@ public class GenericSearch{
        while(true) {
           while (!stack.isEmpty()) {
             Node node = stack.pop();
-            System.out.println("Level: "+ node.getState().getProsperity());
 
             if (visualize) {
                 System.out.println("Current node: " + node);
@@ -190,7 +184,6 @@ public class GenericSearch{
 
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
-            System.out.println("Level: "+ node.getState().getProsperity());
 
             if (visualize) {
                 System.out.println("Current node: " + node);
@@ -247,8 +240,8 @@ public class GenericSearch{
     private static Node aStarSearch(Node initialNode, int heuristicIndex) {
         // Implement A* search with the specified heuristic
         // You'll need to use a priority queue based on the sum of the path cost and heuristic value
-   PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> getPathCost(node)+heuristic1(node)));
-          priorityQueue.add(initialNode);
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> getPathCost(node)+heuristic1(node)));
+        priorityQueue.add(initialNode);
           
           while (!priorityQueue.isEmpty()) {
               Node node = priorityQueue.poll();
