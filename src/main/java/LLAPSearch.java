@@ -63,9 +63,11 @@ public class LLAPSearch extends GenericSearch {
 
             plan.remove(0);
 
-            while(!plan.isEmpty()){
+            while(plan.size() > 1){
                 p = p + plan.remove(0) + ",";
             }
+
+            p = p + plan.remove(0);
 
             answer = p + ";" + cost + ";" + NE; 
             //System.out.println("Solution Found!");
@@ -155,36 +157,33 @@ public class LLAPSearch extends GenericSearch {
         }else{
             tempM = 0;
         }
-        if (node.state.getFood() < 50 && (node.state.getMoney() >= energyPrice + foodPrice + materialsPrice)  ) {
-            return new Node(
-                new State(
-                    node.state.getProsperity(),
-                    min(node.state.getFood() - 1  +tempF,50),
-                    min(node.state.getMaterials() - 1 + tempM,50),
-                    min(node.state.getEnergy() - 1 + tempE,50),
-                    node.state.getMoney() - energyPrice - foodPrice - materialsPrice
-                ),
-                node,
-                new Action(
-                    "RequestFood",
-                    amountRequestFood,
-                    delayRequestFood,
-                    energyPrice + foodPrice + materialsPrice,
-                    -1,
-                    -1,
-                    -1,
-                    0,
-                    true,
-                    false,
-                    false,
-                    amountRequestFood,
-                    0,
-                    0
-                ),
-                node.getDepth() + 1
-            );
-        }
-        return null;
+        return new Node(
+            new State(
+                node.state.getProsperity(),
+                min(node.state.getFood() - 1  + tempF,50),
+                min(node.state.getMaterials() - 1 + tempM,50),
+                min(node.state.getEnergy() - 1 + tempE,50),
+                node.state.getMoney() - energyPrice - foodPrice - materialsPrice
+            ),
+            node,
+            new Action(
+                "RequestFood",
+                amountRequestFood,
+                delayRequestFood,
+                energyPrice + foodPrice + materialsPrice,
+                -1,
+                -1,
+                -1,
+                0,
+                true,
+                false,
+                false,
+                amountRequestFood,
+                0,
+                0
+            ),
+            node.getDepth() + 1
+        );
     }
 
     public static Node requestMaterials(Node node) {
@@ -207,36 +206,34 @@ public class LLAPSearch extends GenericSearch {
         }else{
             tempM = 0;
         }
-        if (node.state.getMaterials() < 50 && (node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) ) {
-            return new Node(
-                new State(
-                    node.state.getProsperity(),
-                    min(node.state.getFood() - 1  +tempF,50),
-                    min(node.state.getMaterials() - 1 + tempM,50),
-                    min(node.state.getEnergy() - 1 + tempE,50),
-                    node.state.getMoney() - energyPrice - foodPrice - materialsPrice
-                ),
-                node,
-                new Action(
-                    "RequestMaterials",
-                    amountRequestMaterials,
-                    delayRequestMaterials,
-                    energyPrice + foodPrice + materialsPrice,
-                    -1,
-                    -1,
-                    -1,
-                    0,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0,
-                    amountRequestMaterials
-                ),
-                node.getDepth() + 1
-            );
-        }
-        return null;
+ 
+        return new Node(
+            new State(
+                node.state.getProsperity(),
+                min(node.state.getFood() - 1  +tempF,50),
+                min(node.state.getMaterials() - 1 + tempM,50),
+                min(node.state.getEnergy() - 1 + tempE,50),
+                node.state.getMoney() - energyPrice - foodPrice - materialsPrice
+            ),
+            node,
+            new Action(
+                "RequestMaterials",
+                amountRequestMaterials,
+                delayRequestMaterials,
+                energyPrice + foodPrice + materialsPrice,
+                -1,
+                -1,
+                -1,
+                0,
+                false,
+                false,
+                true,
+                0,
+                0,
+                amountRequestMaterials
+            ),
+            node.getDepth() + 1
+        );
     }
 
     public static Node requestEnergy(Node node){
@@ -260,37 +257,33 @@ public class LLAPSearch extends GenericSearch {
             tempM = 0;
         }
 
-        if (node.state.getEnergy() < 50 && (node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) ) {
-            return new Node(
-                new State(
-                    node.state.getProsperity(),
-                    min(node.state.getFood() - 1  +tempF,50),
-                    min(node.state.getMaterials() - 1 + tempM,50),
-                    min(node.state.getEnergy() - 1 + tempE,50),
-                    node.state.getMoney() - energyPrice - foodPrice - materialsPrice
-                ),
-                node,
-                new Action(
-                    "RequestEnergy",
-                    amountRequestEnergy,
-                    delayRequestEnergy,
-                    energyPrice + foodPrice + materialsPrice,
-                    -1,
-                    -1,
-                    -1,
-                    0,
-                    false,
-                    true,
-                    false,
-                    0,
-                    amountRequestEnergy,
-                    0
-                ),
-                node.getDepth() + 1
-            );
-        }
-        
-        return null;
+        return new Node(
+            new State(
+                node.state.getProsperity(),
+                min(node.state.getFood() - 1  +tempF,50),
+                min(node.state.getMaterials() - 1 + tempM,50),
+                min(node.state.getEnergy() - 1 + tempE,50),
+                node.state.getMoney() - energyPrice - foodPrice - materialsPrice
+            ),
+            node,
+            new Action(
+                "RequestEnergy",
+                amountRequestEnergy,
+                delayRequestEnergy,
+                energyPrice + foodPrice + materialsPrice,
+                -1,
+                -1,
+                -1,
+                0,
+                false,
+                true,
+                false,
+                0,
+                amountRequestEnergy,
+                0
+            ),
+            node.getDepth() + 1
+        );
     }
 
     public static Node wait(Node node) {
@@ -391,37 +384,33 @@ public class LLAPSearch extends GenericSearch {
             tempM2 = node.getAction().getMaterialsAmount();
             delaymaterials = node.getAction().isMaterialsDelay();
         }
-
-        if (node.state.getFood() >= foodUseBUILD1 && node.state.getMaterials() >= materialsUseBUILD1 && node.state.getEnergy() >= energyUseBUILD1 && node.state.getMoney() >= (priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice))) {
-            return new Node(
-                new State(
-                    node.state.getProsperity() + prosperityBUILD1,
-                    node.state.getFood() + tempF - foodUseBUILD1,
-                    node.state.getMaterials() + tempM - materialsUseBUILD1,
-                    node.state.getEnergy() + tempE - energyUseBUILD1,
-                    node.state.getMoney() - priceBUILD1 - (energyUseBUILD1 * energyPrice) - (materialsUseBUILD1 * materialsPrice) - (foodUseBUILD1 * foodPrice)
-                ),
-                node,
-                new Action(
-                    "BUILD1",
-                    0,
-                    max(node.action.getDelay() - 1,0),
-                    priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice),
-                    foodUseBUILD1,
-                    materialsUseBUILD1,
-                    energyUseBUILD1,
-                    prosperityBUILD1,
-                    delayfood,
-                    delayenergy,
-                    delaymaterials,
-                    tempF2,
-                    tempE2,
-                    tempM2
-                ),
-                node.getDepth() + 1
-            );
-        }
-        return null;
+        return new Node(
+            new State(
+                node.state.getProsperity() + prosperityBUILD1,
+                node.state.getFood() + tempF - foodUseBUILD1,
+                node.state.getMaterials() + tempM - materialsUseBUILD1,
+                node.state.getEnergy() + tempE - energyUseBUILD1,
+                node.state.getMoney() - priceBUILD1 - (energyUseBUILD1 * energyPrice) - (materialsUseBUILD1 * materialsPrice) - (foodUseBUILD1 * foodPrice)
+            ),
+            node,
+            new Action(
+                "BUILD1",
+                0,
+                max(node.action.getDelay() - 1,0),
+                priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice),
+                foodUseBUILD1,
+                materialsUseBUILD1,
+                energyUseBUILD1,
+                prosperityBUILD1,
+                delayfood,
+                delayenergy,
+                delaymaterials,
+                tempF2,
+                tempE2,
+                tempM2
+            ),
+            node.getDepth() + 1
+        );
     }
 
     public static Node build2(Node node) {
@@ -459,37 +448,34 @@ public class LLAPSearch extends GenericSearch {
             delaymaterials = node.getAction().isMaterialsDelay();
         }
 
-        if (node.state.getFood() >= foodUseBUILD2 && node.state.getMaterials() >= materialsUseBUILD2 && node.state.getEnergy() >= energyUseBUILD2 && node.state.getMoney() >= (priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice))) {
-            return new Node(
-                new State(
-                    node.state.getProsperity() + prosperityBUILD2,
-                    node.state.getFood() + tempF - foodUseBUILD2,
-                    node.state.getMaterials() + tempM - materialsUseBUILD2,
-                    node.state.getEnergy() + tempE - energyUseBUILD2,
-                    node.state.getMoney() - priceBUILD2 - (energyUseBUILD2 * energyPrice) - (materialsUseBUILD2 * materialsPrice) - (foodUseBUILD2 * foodPrice)
-                ),
-                node,
-                new Action(
-                    "BUILD2",
-                    0,
-                    max(node.action.getDelay() - 1,0),
-                    priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice),
-                    foodUseBUILD2,
-                    materialsUseBUILD2,
-                    energyUseBUILD2,
-                    prosperityBUILD2,
-                    delayfood,
-                    delayenergy,
-                    delaymaterials,
-                    tempF2,
-                    tempE2,
-                    tempM2
-                ),
-                node.getDepth() + 1
-                
-            );
-        }
-        return null;
+        return new Node(
+            new State(
+                node.state.getProsperity() + prosperityBUILD2,
+                node.state.getFood() + tempF - foodUseBUILD2,
+                node.state.getMaterials() + tempM - materialsUseBUILD2,
+                node.state.getEnergy() + tempE - energyUseBUILD2,
+                node.state.getMoney() - priceBUILD2 - (energyUseBUILD2 * energyPrice) - (materialsUseBUILD2 * materialsPrice) - (foodUseBUILD2 * foodPrice)
+            ),
+            node,
+            new Action(
+                "BUILD2",
+                0,
+                max(node.action.getDelay() - 1,0),
+                priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice),
+                foodUseBUILD2,
+                materialsUseBUILD2,
+                energyUseBUILD2,
+                prosperityBUILD2,
+                delayfood,
+                delayenergy,
+                delaymaterials,
+                tempF2,
+                tempE2,
+                tempM2
+            ),
+            node.getDepth() + 1
+            
+        );
     }
 
     public static void main(String[] args) {
@@ -565,7 +551,7 @@ public class LLAPSearch extends GenericSearch {
         String solution = search(initialState0, "DF", true);
 
         System.out.println(solution);
-        System.out.println("Visited Nodes: " + visitedStates.size());
+        //System.out.println("Visited Nodes: " + visitedStates.size());
 
         //LLAPPlanChecker pc = new LLAPPlanChecker(initialState0);
 		//assertTrue("The output actions do not lead to a goal state.", pc.applyPlan(initialState0, solution));
