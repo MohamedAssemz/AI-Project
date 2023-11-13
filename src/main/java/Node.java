@@ -13,11 +13,20 @@ public class Node {
         this.depth = depth;
     }
 
-    public String toString(){
+    public String tooString(){
+        String Delays = " FoodDelay: " + this.getAction().isFoodDelay() + " EnergyDelay: " + this.getAction().isEnergyDelay() + " MaterialDelay: " + this.getAction().isMaterialsDelay();
         return "Money: " + this.getState().getMoney() + " Food: " +  
         this.getState().getFood() + " Energy: " + 
         this.getState().getEnergy() + " Material: " + 
-        this.getState().getMaterials() + " Prosperity: " + this.getState().getProsperity() + " Action: " + this.getAction().getName() + " Depth: " + this.depth + " Amount: "  + this.getAction().getAmount();
+        this.getState().getMaterials() + " Prosperity: " + this.getState().getProsperity() + " Delay: " + this.getAction().getDelay() + Delays  + " Amount: "  + this.getAction().getAmount();
+    }
+
+    public String toString(){
+        String Delays = " FoodDelay: " + this.getAction().isFoodDelay() + " EnergyDelay: " + this.getAction().isEnergyDelay() + " MaterialDelay: " + this.getAction().isMaterialsDelay();
+        return "Money: " + this.getState().getMoney() + " Food: " +  
+        this.getState().getFood() + " Energy: " + 
+        this.getState().getEnergy() + " Material: " + 
+        this.getState().getMaterials() + " Prosperity: " + this.getState().getProsperity() + " Action: " + this.getAction().getName() + " Delay: " + this.getAction().getDelay() + Delays  + " Amount: "  + this.getAction().getAmount();
     }
 
     public int getDepth() {

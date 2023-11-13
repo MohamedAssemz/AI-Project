@@ -31,6 +31,12 @@ public class GenericSearch{
             0,
             0,
             0,
+            0,
+            false,
+            false,
+            false,
+            0,
+            0,
             0
         ),
         0
@@ -75,18 +81,22 @@ public class GenericSearch{
 
             if(node!=null && !isStateVisited(node.toString())){
                 if (LLAPSearch.visuals) {
+                    if(node.parent!=null){
+                        System.out.println("Parent state: " + node.parent.toString()  + "\n");
+                    }
                     System.out.println("Current state: " + node.toString()  + "\n");
                     System.out.println("Remaining nodes in queue: " + queue.size()  + "\n");                }  
                 
                 if (isGoalState(node.getState()) ) {
                     if (LLAPSearch.visuals) {
+                        System.out.println("Goal Node: " + node.toString() + "\n");
                         System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
                         System.out.println("--------------------------------------------");
                     }
                     return node; // Goal state found
                 }
 
-                markStateVisited(node.toString());
+                markStateVisited(node.tooString());
             
                 List<Node> successors = expand(node);
                 queue.addAll(successors);
@@ -97,6 +107,12 @@ public class GenericSearch{
                     System.out.println("--------------------------------------------");
                 }
 
+            }else{
+                if(node == null && LLAPSearch.visuals){
+                    System.out.println("Null Node");
+                }else if(isStateVisited(node.toString()) && LLAPSearch.visuals){
+                    System.out.println("Already Visited Node: " + node.toString()  + "\n");
+                }
             }
         }
 
@@ -157,8 +173,8 @@ public class GenericSearch{
                 }
                 if (isGoalState(node.getState())) {
                     if (LLAPSearch.visuals) {
-                    System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
-                    System.out.println("--------------------------------------------");
+                        System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                        System.out.println("--------------------------------------------");
                     }
                     return node; // Goal state found
                 }
@@ -188,13 +204,6 @@ public class GenericSearch{
 
     private static Node uniformCostSearch(Node initialNode) {
 
-        /*Comparator<Node> priceComparator = new Comparator<Node>() {
-            @Override
-            public int compare(Node left, Node right){
-                return left.getPathCost().compareTo(right.getPathCost());
-            }
-        };*/
-
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(new NodeComparator());
 
         priorityQueue.add(initialNode);
@@ -211,8 +220,8 @@ public class GenericSearch{
                 }
                 if (isGoalState(node.getState())) {
                     if (LLAPSearch.visuals) {
-                    System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
-                    System.out.println("--------------------------------------------");
+                        System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                        System.out.println("--------------------------------------------");
                     }
                     return node; // Goal state found
                 }else{
@@ -220,10 +229,7 @@ public class GenericSearch{
                 }
             
             List<Node> successors = expand(node);
-            if (successors != null) {
-                // Filter out null elements before adding to the PriorityQueue
-                priorityQueue.addAll(successors.stream().filter(Objects::nonNull).collect(Collectors.toList()));
-            }
+            priorityQueue.addAll(successors);
 
             if(LLAPSearch.visuals){
                 System.out.println("Next Action: " + priorityQueue.peek().action.getName()  + "\n");
@@ -328,14 +334,14 @@ public class GenericSearch{
     	
     	if(LLAPSearch.prosperityBUILD1>LLAPSearch.prosperityBUILD2) {
            minBuild=prosDiff/LLAPSearch.prosperityBUILD1;
-     	   minCost=minBuild*(LLAPSearch.priceBUILD1+LLAPSearch.foodUseBUILD1*foodPrice+materialsPrice*LLAPSearch.materialsUseBUILD1+energyPrice*LLAPSearch.energyUseBUILD1);
+     	   minCost=minBuild*(LLAPSearch.priceBUILD1+LLAPSearch.foodUseBUILD1*LLAPSearch.foodPrice+LLAPSearch.materialsPrice*LLAPSearch.materialsUseBUILD1+LLAPSearch.energyPrice*LLAPSearch.energyUseBUILD1);
 
     	}
     	else {
     	  minBuild=prosDiff/LLAPSearch.prosperityBUILD2;
-    	  minCost=minBuild*(LLAPSearch.priceBUILD2+foodPrice*LLAPSearch.foodUseBUILD2+materialsPrice*LLAPSearch.materialsUseBUILD2
-          +energyPrice*LLAPSearch.energyUseBUILD2);
-    	  minBuild=prosDiff/prosperityBUILD2;
+    	  minCost=minBuild*(LLAPSearch.priceBUILD2+LLAPSearch.foodPrice*LLAPSearch.foodUseBUILD2+LLAPSearch.materialsPrice*LLAPSearch.materialsUseBUILD2
+          +LLAPSearch.energyPrice*LLAPSearch.energyUseBUILD2);
+    	  minBuild=prosDiff/LLAPSearch.prosperityBUILD2;
     	}
     	return minCost;
     	
@@ -347,11 +353,11 @@ public class GenericSearch{
     public static List<Node> expand(Node node) {
         List<Node> children = new ArrayList<>();
 
-        if (node != null && node.action.getDelay() > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
+        if (node != null && LLAPSearch.max(node.action.getDelay() - 1,0) > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
             children.add(LLAPSearch.wait(node));
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
-        }else if (node != null && node.action.getDelay() == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
+        }else if (node != null && LLAPSearch.max(node.action.getDelay() - 1,0) == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
             children.add(LLAPSearch.requestFood(node));
             children.add(LLAPSearch.requestMaterials(node));
             children.add(LLAPSearch.requestEnergy(node));
