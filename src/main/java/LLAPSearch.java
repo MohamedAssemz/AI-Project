@@ -1,3 +1,4 @@
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -37,7 +38,7 @@ public class LLAPSearch extends GenericSearch {
 
         public static boolean visuals = false;
 
-    public static String solve(String initialState, String strategy, boolean visualize) {
+    public static String search(String initialState, String strategy, boolean visualize) {
         visuals = visualize;
         State initial = parseInitialState(initialState);
 
@@ -45,13 +46,15 @@ public class LLAPSearch extends GenericSearch {
         String answer = "";
 
         if(node == null){
-            answer = "No Solution Found!";
+            answer = "NOSOLUTION";
             return answer;
         }else if(node != null){
 
             int cost = 0;
             List<String> nodes = new LinkedList<>(); 
             List<String> plan = new LinkedList<>();
+            String p = "";
+            int NE = visitedStates.size();
 
             
 
@@ -62,8 +65,14 @@ public class LLAPSearch extends GenericSearch {
                 node = node.parent;
             }
 
-            answer = plan + "," + cost + "," + nodes; 
-            System.out.println("Solution Found!");
+            plan.remove(0);
+
+            while(!plan.isEmpty()){
+                p = p + plan.remove(0) + ",";
+            }
+
+            answer = p + ";" + cost + ";" + NE; 
+            //System.out.println("Solution Found!");
 
         }
 
@@ -115,8 +124,8 @@ public class LLAPSearch extends GenericSearch {
         );
     }
 
-    public static int min(int a, int b) {
-        if (a < b) {
+    public static int max(int a, int b) {
+        if (a > b) {
             return a;
         }
         return b;
@@ -135,7 +144,7 @@ public class LLAPSearch extends GenericSearch {
                 ),
                 node,
                 new Action(
-                    "Request Food",
+                    "RequestFood",
                     amountRequestFood,
                     delayRequestFood,
                     energyPrice + foodPrice + materialsPrice,
@@ -163,7 +172,7 @@ public class LLAPSearch extends GenericSearch {
                 ),
                 node,
                 new Action(
-                    "Request Materials",
+                    "RequestMaterials",
                     amountRequestMaterials,
                     delayRequestMaterials,
                     energyPrice + foodPrice + materialsPrice,
@@ -191,7 +200,7 @@ public class LLAPSearch extends GenericSearch {
                 ),
                 node,
                 new Action(
-                    "Request Energy",
+                    "RequestEnergy",
                     amountRequestEnergy,
                     delayRequestEnergy,
                     energyPrice + foodPrice + materialsPrice,
@@ -226,9 +235,9 @@ public class LLAPSearch extends GenericSearch {
             ),
             node,
             new Action(
-                "Wait",
+                "WAIT",
                 0,
-                node.action.getDelay() - 1,
+                max(node.action.getDelay() - 1,0),
                 energyPrice + foodPrice + materialsPrice,
                 tempF - 1,
                 tempM - 1,
@@ -259,9 +268,9 @@ public class LLAPSearch extends GenericSearch {
                 ),
                 node,
                 new Action(
-                    "Build 1",
+                    "BUILD1",
                     1,
-                    node.action.getDelay() - 1,
+                    max(node.action.getDelay() - 1,0),
                     priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice),
                     foodUseBUILD1,
                     materialsUseBUILD1,
@@ -294,9 +303,9 @@ public class LLAPSearch extends GenericSearch {
                 ),
                 node,
                 new Action(
-                    "Build 2",
+                    "BUILD2",
                     1,
-                    node.action.getDelay() - 1,
+                    max(node.action.getDelay() - 1,0),
                     priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice),
                     foodUseBUILD2,
                     materialsUseBUILD2,
@@ -311,15 +320,15 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static void main(String[] args) {
-        String initialState0 = "30;" +
-        "30,25,19;" +
-        "90,120,150;" +
-        "9,2;13,1;11,1;" +
-        "3195,11,12,10,34;" +
-        "691,7,8,6,15;";
+	String initialState0 = "17;" +
+                "49,30,46;" +
+                "7,57,6;" +
+                "7,1;20,2;29,2;" +
+                "350,10,9,8,28;" +
+                "408,8,12,13,34;";
 
 
-        String solution = solve(initialState0, "ID", true);
+        String solution = search(initialState0, "DF", true);
 
         System.out.println(solution);
         System.out.println("Visited Nodes: " + visitedStates.size());
