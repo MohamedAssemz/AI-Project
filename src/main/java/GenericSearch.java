@@ -2,30 +2,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GenericSearch{
-    public static int foodPrice = LLAPSearch.foodPrice;
-    public static int materialsPrice = LLAPSearch.materialsPrice;
-    public static int energyPrice = LLAPSearch.energyPrice;
-
-    public static int amountRequestFood = LLAPSearch.amountRequestFood;
-    public static int delayRequestFood = LLAPSearch.delayRequestFood;
-
-    public static int amountRequestMaterials = LLAPSearch.amountRequestMaterials;
-    public static int delayRequestMaterials = LLAPSearch.delayRequestMaterials;
-
-    public static int amountRequestEnergy = LLAPSearch.amountRequestEnergy;
-    public static int delayRequestEnergy = LLAPSearch.delayRequestEnergy;
-
-    public static int priceBUILD1 = LLAPSearch.priceBUILD1;
-    public static int foodUseBUILD1 = LLAPSearch.foodUseBUILD1;
-    public static int materialsUseBUILD1 = LLAPSearch.materialsUseBUILD1;
-    public static int energyUseBUILD1 = LLAPSearch.energyUseBUILD1;
-    public static int prosperityBUILD1 = LLAPSearch.prosperityBUILD1;
-
-    public static int priceBUILD2 = LLAPSearch.priceBUILD2;
-    public static int foodUseBUILD2 = LLAPSearch.foodUseBUILD2;
-    public static int materialsUseBUILD2 = LLAPSearch.materialsUseBUILD2;
-    public static int energyUseBUILD2 = LLAPSearch.energyUseBUILD2;
-    public static int prosperityBUILD2 = LLAPSearch.prosperityBUILD2;
     public static  int currentDepth;
     
     public static Map<String, Boolean> visitedStates = new HashMap<>();
@@ -46,8 +22,6 @@ public class GenericSearch{
 
     public static Node GeneralSearch(State initialState, String strategy) {
 
-        System.out.println("Visualize: " + LLAPSearch.visuals);
-
 
         Node initialNode = new Node(initialState, null, new Action(
             "Initialize Node",
@@ -61,6 +35,10 @@ public class GenericSearch{
         ),
         0
         );
+
+        if(initialNode.state.getEnergy() == 0 || initialNode.state.getFood() == 0 || initialNode.state.getMaterials() == 0 || initialNode.state.getMoney() == 0){
+            return null;
+        }
 
         if (strategy.equals("BF")) {
             return breadthFirstSearch(initialNode);
@@ -96,8 +74,15 @@ public class GenericSearch{
             Node node = queue.poll();
 
             if(node!=null && !isStateVisited(node.toString())){
+                if (LLAPSearch.visuals) {
+                    System.out.println("Current state: " + node.toString()  + "\n");
+                    System.out.println("Remaining nodes in queue: " + queue.size()  + "\n");                }  
                 
                 if (isGoalState(node.getState()) ) {
+                    if (LLAPSearch.visuals) {
+                        System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                        System.out.println("--------------------------------------------");
+                    }
                     return node; // Goal state found
                 }
 
@@ -105,12 +90,14 @@ public class GenericSearch{
             
                 List<Node> successors = expand(node);
                 queue.addAll(successors);
-            }
 
-            if (LLAPSearch.visuals) {
-                System.out.println("Current state: " + node.toString()  + "\n");
-                System.out.println("Remaining nodes in queue: " + queue.size()  + "\n");
-            }  
+
+                if(LLAPSearch.visuals){
+                    System.out.println("Next Action: " + queue.peek().action.getName()  + "\n");
+                    System.out.println("--------------------------------------------");
+                }
+
+            }
         }
 
         return null; // Goal state not found
@@ -124,7 +111,15 @@ public class GenericSearch{
             Node node = stack.pop();
 
             if(node!=null && !isStateVisited(node.toString())){
+                if (LLAPSearch.visuals) {
+                    System.out.println("Current state: " + node.toString()  + "\n");
+                    System.out.println("Remaining nodes in queue: " + stack.size()  + "\n");
+                }
                 if (isGoalState(node.getState())) {
+                    if (LLAPSearch.visuals) {
+                    System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                    System.out.println("--------------------------------------------");
+                    }
                     return node; // Goal state found
                 }
 
@@ -132,13 +127,16 @@ public class GenericSearch{
 
                 List<Node> successors = expand(node);
                 stack.addAll(successors);
+
+                if(LLAPSearch.visuals){
+                    System.out.println("Next Action: " + stack.peek().action.getName()  + "\n");
+                    System.out.println("--------------------------------------------");
+                }
+
+
                 
             }
 
-            if (LLAPSearch.visuals) {
-                System.out.println("Current state: " + node.toString()  + "\n");
-                System.out.println("Remaining nodes in queue: " + stack.size()  + "\n");
-            }
         }
 
         return null; // Goal state not found
@@ -153,7 +151,15 @@ public class GenericSearch{
             Node node = stack.pop();
 
             if(node!=null && !isStateVisited(node.toString())){
+                if (LLAPSearch.visuals) {
+                    System.out.println("Current state: " + node.toString()  + "\n");
+                    System.out.println("Remaining nodes in queue: " + stack.size()  + "\n");
+                }
                 if (isGoalState(node.getState())) {
+                    if (LLAPSearch.visuals) {
+                    System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                    System.out.println("--------------------------------------------");
+                    }
                     return node; // Goal state found
                 }
 
@@ -161,13 +167,16 @@ public class GenericSearch{
 
                 List<Node> successors = expand(node);
                 stack.addAll(successors);
+
+                if(LLAPSearch.visuals){
+                    System.out.println("Next Action: " + stack.peek().action.getName()  + "\n");
+                    System.out.println("--------------------------------------------");
+                }
+
+
                 
             }
 
-            if (LLAPSearch.visuals) {
-                System.out.println("Current state: " + node.toString()  + "\n");
-                System.out.println("Remaining nodes in queue: " + stack.size()  + "\n");
-            }
         }
         if(currentDepth>1000) {
             return null;
@@ -179,7 +188,12 @@ public class GenericSearch{
 
     private static Node uniformCostSearch(Node initialNode) {
 
-        //Comparator<Node> priceComparator = Comparator.comparingInt(Node::getPathCost);
+        /*Comparator<Node> priceComparator = new Comparator<Node>() {
+            @Override
+            public int compare(Node left, Node right){
+                return left.getPathCost().compareTo(right.getPathCost());
+            }
+        };*/
 
         PriorityQueue<Node> priorityQueue = new PriorityQueue<>(new NodeComparator());
 
@@ -190,7 +204,16 @@ public class GenericSearch{
 
             if (node!=null){
             if( !isStateVisited(node.toString())){
+                if (LLAPSearch.visuals) {
+                    System.out.println("Current state: " + node.toString()  + "\n");
+                    System.out.println("Remaining nodes in queue: " + priorityQueue.size()  + "\n");
+
+                }
                 if (isGoalState(node.getState())) {
+                    if (LLAPSearch.visuals) {
+                    System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                    System.out.println("--------------------------------------------");
+                    }
                     return node; // Goal state found
                 }else{
                     markStateVisited(node.toString());
@@ -202,10 +225,12 @@ public class GenericSearch{
                 priorityQueue.addAll(successors.stream().filter(Objects::nonNull).collect(Collectors.toList()));
             }
 
-            if (LLAPSearch.visuals) {
-                System.out.println("Current state: " + node.toString()  + "\n");
-                System.out.println("Remaining nodes in queue: " + priorityQueue.size()  + "\n");
+            if(LLAPSearch.visuals){
+                System.out.println("Next Action: " + priorityQueue.peek().action.getName()  + "\n");
+                System.out.println("--------------------------------------------");
             }
+
+
         }
         
         }
@@ -224,6 +249,8 @@ public class GenericSearch{
             Node node = priorityQueue.poll();
 
             if (isGoalState(node.getState())) {
+                System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                System.out.println("--------------------------------------------");
                 return node; // Goal state found
             }
 
@@ -250,7 +277,9 @@ public class GenericSearch{
               Node node = priorityQueue.poll();
 
               if (isGoalState(node.getState())) {
-                  return node; // Goal state found
+                System.out.println("Prosperity: " + node.state.getProsperity() + "\n");
+                System.out.println("--------------------------------------------");
+                return node; // Goal state found
               }
 
               List<Node> successors = expand(node);
@@ -295,14 +324,18 @@ public class GenericSearch{
     	if ( prosDiff==0 || prosDiff<0) {
     		minCost=0;
     	}
-    	if(prosperityBUILD1>prosperityBUILD2) {
-           minBuild=prosDiff/prosperityBUILD1;
-     	   minCost=minBuild*(priceBUILD1+foodPrice*foodUseBUILD1+ materialsPrice*materialsUseBUILD1+energyPrice*energyUseBUILD1);
+    
+    	
+    	if(LLAPSearch.prosperityBUILD1>LLAPSearch.prosperityBUILD2) {
+           minBuild=prosDiff/LLAPSearch.prosperityBUILD1;
+     	   minCost=minBuild*(LLAPSearch.priceBUILD1+LLAPSearch.foodUseBUILD1*foodPrice+materialsPrice*LLAPSearch.materialsUseBUILD1+energyPrice*LLAPSearch.energyUseBUILD1);
 
     	}
     	else {
+    	  minBuild=prosDiff/LLAPSearch.prosperityBUILD2;
+    	  minCost=minBuild*(LLAPSearch.priceBUILD2+foodPrice*LLAPSearch.foodUseBUILD2+materialsPrice*LLAPSearch.materialsUseBUILD2
+          +energyPrice*LLAPSearch.energyUseBUILD2);
     	  minBuild=prosDiff/prosperityBUILD2;
-    	  minCost=minBuild*(priceBUILD2+foodPrice*foodUseBUILD2+materialsPrice*materialsUseBUILD2+energyPrice*energyUseBUILD2);
     	}
     	return minCost;
     	
@@ -325,18 +358,28 @@ public class GenericSearch{
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
         }
+        while(children.remove(null)){
+            if(LLAPSearch.visuals){
+                System.out.println("Null Child Removed");
+            }
+        };
 
-        while(children.remove(null));
 
         for(int i=0; i<children.size(); i++){
             if(isStateVisited(children.get(i).toString())){
+                if(LLAPSearch.visuals){
+                    System.out.println("New Child: " + children.get(i).toString());
+                    System.out.println("Duplicated Child: " + visitedStates.get(children.get(i).toString()) + "\n");
+                }
+
                 children.remove(i);
             }
         }
 
-        System.out.println("Action: " + node.action.getName() + "\n");
-        System.out.println("Children: " + children + "\n");
-        System.out.println("--------------------------------------------");
+        if(LLAPSearch.visuals){
+            System.out.println("Prosperity: " + node.state.getProsperity() );
+            System.out.println("Children: " + children.size() );
+        }
         
         return children;
     }

@@ -17,7 +17,7 @@ public class Node {
         return "Money: " + this.getState().getMoney() + " Food: " +  
         this.getState().getFood() + " Energy: " + 
         this.getState().getEnergy() + " Material: " + 
-        this.getState().getMaterials() + " Prosperity: " + this.getState().getProsperity() + " Action: " + this.getAction().getName();
+        this.getState().getMaterials() + " Prosperity: " + this.getState().getProsperity() + " Action: " + this.getAction().getName() + " Depth: " + this.depth + " Amount: "  + this.getAction().getAmount();
     }
 
     public int getDepth() {
