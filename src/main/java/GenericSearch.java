@@ -310,10 +310,19 @@ public class GenericSearch{
     	}
     	// cost for the root node action
     	cost+=currentNode.action.getPrice();
-    	return cost;
-    	
-    	
-    	
+    	return cost;	
+    }
+
+        public static int getPathCostProsperity(Node currentNode) {
+    	int cost=0;
+    	while (currentNode.depth!=0) {
+    		cost+=currentNode.action.getProsperityChange();
+    		currentNode=currentNode.parent;  		
+    		
+    	}
+    	// cost for the root node action
+    	cost+=currentNode.action.getProsperityChange();
+    	return cost;	
     }
     
     
