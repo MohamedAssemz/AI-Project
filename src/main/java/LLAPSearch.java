@@ -181,8 +181,8 @@ public class LLAPSearch extends GenericSearch {
                     -1,
                     0,
                     false,
-                    true,
                     false,
+                    true,
                     0,
                     0,
                     amountRequestMaterials
@@ -214,8 +214,8 @@ public class LLAPSearch extends GenericSearch {
                     -1,
                     0,
                     false,
-                    false,
                     true,
+                    false,
                     0,
                     amountRequestEnergy,
                     0
@@ -236,19 +236,19 @@ public class LLAPSearch extends GenericSearch {
         int tempE2 = 0;
         int tempM2 = 0;
 
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isFoodDelay()){
             tempF = node.getAction().getFoodAmount(); 
         }else{
             tempF = 0;
             tempF2 = node.getAction().getFoodAmount();
         }
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isEnergyDelay()){
             tempE = node.getAction().getEnergyAmount();
         }else{
             tempE = 0;
             tempE2 = node.getAction().getEnergyAmount();
         }
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isMaterialsDelay()){
             tempM = node.getAction().getMaterialsAmount();
         }else{
             tempM = 0;
@@ -293,19 +293,19 @@ public class LLAPSearch extends GenericSearch {
         int tempE2 = 0;
         int tempM2 = 0;
 
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isFoodDelay()){
             tempF = node.getAction().getFoodAmount(); 
         }else{
             tempF = 0;
             tempF2 = node.getAction().getFoodAmount();
         }
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isEnergyDelay()){
             tempE = node.getAction().getEnergyAmount();
         }else{
             tempE = 0;
             tempE2 = node.getAction().getEnergyAmount();
         }
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isMaterialsDelay()){
             tempM = node.getAction().getMaterialsAmount();
         }else{
             tempM = 0;
@@ -353,19 +353,19 @@ public class LLAPSearch extends GenericSearch {
         int tempE2 = 0;
         int tempM2 = 0;
 
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isFoodDelay()){
             tempF = node.getAction().getFoodAmount(); 
         }else{
             tempF = 0;
             tempF2 = node.getAction().getFoodAmount();
         }
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isEnergyDelay()){
             tempE = node.getAction().getEnergyAmount();
         }else{
             tempE = 0;
             tempE2 = node.getAction().getEnergyAmount();
         }
-        if(node.parent != null && node.action.getDelay() - 1 == 0){
+        if(node.parent != null && node.action.getDelay() == 0 && node.getAction().isMaterialsDelay()){
             tempM = node.getAction().getMaterialsAmount();
         }else{
             tempM = 0;
@@ -406,15 +406,15 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static void main(String[] args) {
-	String initialState0 = "17;" +
-                "49,30,46;" +
-                "7,57,6;" +
-                "7,1;20,2;29,2;" +
-                "350,10,9,8,28;" +
-                "408,8,12,13,34;";
+        String initialState10= "32;" +
+        "20,16,11;" +
+        "76,14,14;" +
+        "9,1;9,2;9,1;" +
+        "358,14,25,23,39;" +
+        "5024,20,17,17,38;";
 
 
-        String solution = search(initialState0, "DF", true);
+        String solution = search(initialState10, "BF", true);
 
         System.out.println(solution);
         System.out.println("Visited Nodes: " + visitedStates.size());
