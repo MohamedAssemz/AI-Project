@@ -7,9 +7,9 @@ import java.util.*;
             public int compare(Node s1, Node s2) {
                 
                 if (GenericSearch.getPathCost(s1) < GenericSearch.getPathCost(s2))
-                    return 1;
-                else if (GenericSearch.getPathCost(s1) > GenericSearch.getPathCost(s2))
                     return -1;
+                else if (GenericSearch.getPathCost(s1) > GenericSearch.getPathCost(s2))
+                    return 1;
                     //
                 return 0;
                 }

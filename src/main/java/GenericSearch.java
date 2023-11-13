@@ -202,7 +202,7 @@ public class GenericSearch{
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
 
-            if (!node.equals(null)){
+            if (node!=null){
             if( !isStateVisited(node.toString())){
                 if (LLAPSearch.visuals) {
                     System.out.println("Current state: " + node.toString()  + "\n");
