@@ -292,15 +292,17 @@ public class GenericSearch{
     	int minBuild;
     	// minimum cost needed 
     	int minCost;
-    	
+    	if ( prosDiff==0 || prosDiff<0) {
+    		minCost=0;
+    	}
     	if(prosperityBUILD1>prosperityBUILD2) {
            minBuild=prosDiff/prosperityBUILD1;
-     	   minCost=minBuild*(priceBUILD1+foodUseBUILD1+materialsUseBUILD1+energyUseBUILD1);
+     	   minCost=minBuild*(priceBUILD1+foodPrice*foodUseBUILD1+ materialsPrice*materialsUseBUILD1+energyPrice*energyUseBUILD1);
 
     	}
     	else {
     	  minBuild=prosDiff/prosperityBUILD2;
-    	  minCost=minBuild*(priceBUILD2+foodUseBUILD2+materialsUseBUILD2+energyUseBUILD2);
+    	  minCost=minBuild*(priceBUILD2+foodPrice*foodUseBUILD2+materialsPrice*materialsUseBUILD2+energyPrice*energyUseBUILD2);
     	}
     	return minCost;
     	
