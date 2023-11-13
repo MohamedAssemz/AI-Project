@@ -32,9 +32,9 @@ public class LLAPSearch extends GenericSearch {
         public static int energyUseBUILD2;
         public static int prosperityBUILD2;
 
-        public static int foodTB = 0;
-        public static int materialsTB = 0;
-        public static int energyTB = 0;
+        public static int foodTB;
+        public static int materialsTB;
+        public static int energyTB;
 
         public static boolean visuals = false;
 
@@ -190,6 +190,7 @@ public class LLAPSearch extends GenericSearch {
     public static Node requestEnergy(Node node){
         if (node.state.getEnergy() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
             energyTB = amountRequestEnergy;
+            System.out.println(energyTB);
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -217,13 +218,25 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node wait(Node node) {
-        int tempF = foodTB; 
-        int tempM = materialsTB;
-        int tempE = energyTB;
+        int tempF = 0;
+        int tempE = 0;
+        int tempM = 0;
 
-        foodTB = 0;
-        materialsTB = 0;
-        energyTB = 0;
+        if(node.parent != null && node.getParent().action.getName() == "RequestFood"){
+            tempF = LLAPSearch.foodTB; 
+        }else{
+            foodTB = 0;
+        }
+        if(node.parent != null && node.getParent().action.getName() == "RequestEnergy"){
+            tempE = LLAPSearch.energyTB; 
+        }else{
+            energyTB = 0;
+        }
+        if(node.parent != null && node.getParent().action.getName() == "RequestMaterials"){
+            tempM = materialsTB; 
+        }else{
+            materialsTB = 0;
+        }
 
         return new Node(
             new State(
@@ -249,13 +262,25 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node build1(Node node) {
-        int tempF = foodTB; 
-        int tempM = materialsTB;
-        int tempE = energyTB;
+        int tempF = 0;
+        int tempE = 0;
+        int tempM = 0;
 
-        foodTB = 0;
-        materialsTB = 0;
-        energyTB = 0;
+        if(node.parent != null && node.getParent().action.getName() == "RequestFood"){
+            tempF = LLAPSearch.foodTB; 
+        }else{
+            foodTB = 0;
+        }
+        if(node.parent != null && node.getParent().action.getName() == "RequestEnergy"){
+            tempE = LLAPSearch.energyTB; 
+        }else{
+            energyTB = 0;
+        }
+        if(node.parent != null && node.getParent().action.getName() == "RequestMaterials"){
+            tempM = materialsTB; 
+        }else{
+            materialsTB = 0;
+        }
 
         if (node.state.getFood() >= foodUseBUILD1 && node.state.getMaterials() >= materialsUseBUILD1 && node.state.getEnergy() >= energyUseBUILD1 && node.state.getMoney() >= (priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice))) {
             return new Node(
@@ -284,13 +309,25 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node build2(Node node) {
-        int tempF = foodTB; 
-        int tempM = materialsTB;
-        int tempE = energyTB;
+        int tempF = 0;
+        int tempE = 0;
+        int tempM = 0;
 
-        foodTB = 0;
-        materialsTB = 0;
-        energyTB = 0;
+        if(node.parent != null && node.getParent().action.getName() == "RequestFood"){
+            tempF = LLAPSearch.foodTB; 
+        }else{
+            foodTB = 0;
+        }
+        if(node.parent != null && node.getParent().action.getName() == "RequestEnergy"){
+            tempE = LLAPSearch.energyTB; 
+        }else{
+            energyTB = 0;
+        }
+        if(node.parent != null && node.getParent().action.getName() == "RequestMaterials"){
+            tempM = materialsTB; 
+        }else{
+            materialsTB = 0;
+        }
 
         if (node.state.getFood() >= foodUseBUILD2 && node.state.getMaterials() >= materialsUseBUILD2 && node.state.getEnergy() >= energyUseBUILD2 && node.state.getMoney() >= (priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice))) {
             return new Node(
