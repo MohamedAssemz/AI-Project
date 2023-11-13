@@ -128,6 +128,9 @@ public class GenericSearch{
 
             if(node!=null && !isStateVisited(node.VisitedString())){
                 if (LLAPSearch.visuals) {
+                    if(node.parent!=null){
+                        System.out.println("Parent state: " + node.parent.toString()  + "\n");
+                    }
                     System.out.println("Current state: " + node.toString()  + "\n");
                     System.out.println("Remaining nodes in queue: " + stack.size()  + "\n");
                 }
@@ -168,6 +171,9 @@ public class GenericSearch{
 
             if(node!=null && !isStateVisited(node.VisitedString())){
                 if (LLAPSearch.visuals) {
+                    if(node.parent!=null){
+                        System.out.println("Parent state: " + node.parent.toString()  + "\n");
+                    }
                     System.out.println("Current state: " + node.toString()  + "\n");
                     System.out.println("Remaining nodes in queue: " + stack.size()  + "\n");
                 }
@@ -214,6 +220,9 @@ public class GenericSearch{
             if (node!=null){
             if( !isStateVisited(node.VisitedString())){
                 if (LLAPSearch.visuals) {
+                    if(node.parent!=null){
+                        System.out.println("Parent state: " + node.parent.toString()  + "\n");
+                    }
                     System.out.println("Current state: " + node.toString()  + "\n");
                     System.out.println("Remaining nodes in queue: " + priorityQueue.size()  + "\n");
 
