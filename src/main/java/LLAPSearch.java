@@ -128,7 +128,7 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node requestFood(Node node) {
-        if (node.state.getFood() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
+        if (node.state.getFood() < 50 && (node.state.getMoney() >= energyPrice + foodPrice + materialsPrice)  ) {
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -141,7 +141,7 @@ public class LLAPSearch extends GenericSearch {
                 new Action(
                     "RequestFood",
                     amountRequestFood,
-                    delayRequestFood,
+                    delayRequestFood -1,
                     energyPrice + foodPrice + materialsPrice,
                     -1,
                     -1,
@@ -161,7 +161,7 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node requestMaterials(Node node) {
-        if (node.state.getMaterials() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
+        if (node.state.getMaterials() < 50 && (node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) ) {
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -174,7 +174,7 @@ public class LLAPSearch extends GenericSearch {
                 new Action(
                     "RequestMaterials",
                     amountRequestMaterials,
-                    delayRequestMaterials,
+                    delayRequestMaterials -1,
                     energyPrice + foodPrice + materialsPrice,
                     -1,
                     -1,
@@ -194,7 +194,7 @@ public class LLAPSearch extends GenericSearch {
     }
 
     public static Node requestEnergy(Node node){
-        if (node.state.getEnergy() < 50 && node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) {
+        if (node.state.getEnergy() < 50 && (node.state.getMoney() >= energyPrice + foodPrice + materialsPrice) ) {
             return new Node(
                 new State(
                     node.state.getProsperity(),
@@ -207,7 +207,7 @@ public class LLAPSearch extends GenericSearch {
                 new Action(
                     "RequestEnergy",
                     amountRequestEnergy,
-                    delayRequestEnergy,
+                    delayRequestEnergy-1,
                     energyPrice + foodPrice + materialsPrice,
                     -1,
                     -1,
@@ -414,7 +414,7 @@ public class LLAPSearch extends GenericSearch {
                 "408,8,12,13,34;";
 
 
-        String solution = search(initialState0, "UC", true);
+        String solution = search(initialState0, "DF", true);
 
         System.out.println(solution);
         System.out.println("Visited Nodes: " + visitedStates.size());

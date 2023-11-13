@@ -362,11 +362,11 @@ public class GenericSearch{
     public static List<Node> expand(Node node) {
         List<Node> children = new ArrayList<>();
 
-        if (node != null && LLAPSearch.max(node.action.getDelay() - 1,0) > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
+        if (node != null && LLAPSearch.max(node.action.getDelay() ,0) > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
             children.add(LLAPSearch.wait(node));
             children.add(LLAPSearch.build1(node));
             children.add(LLAPSearch.build2(node));
-        }else if (node != null && LLAPSearch.max(node.action.getDelay() - 1,0) == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
+        }else if (node != null && LLAPSearch.max(node.action.getDelay(),0) == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
             children.add(LLAPSearch.requestFood(node));
             children.add(LLAPSearch.requestMaterials(node));
             children.add(LLAPSearch.requestEnergy(node));
