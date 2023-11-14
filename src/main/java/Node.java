@@ -18,7 +18,12 @@ public class Node {
         return "Money: " + this.getState().getMoney() + " Food: " +  
         this.getState().getFood() + " Energy: " + 
         this.getState().getEnergy() + " Material: " + 
-        this.getState().getMaterials() + " Prosperity: " + this.getState().getProsperity() + " Delay: " + this.getAction().getDelay() + Delays  + " Food Amount: "  + this.getAction().getFoodAmount() + " Energy Amount: "  + this.getAction().getEnergyAmount() + " Material Amount: "  + this.getAction().getMaterialsAmount();
+        this.getState().getMaterials() + " Prosperity: " + 
+        this.getState().getProsperity() + " Delay: " + 
+        this.getAction().getDelay() + Delays  + " Food Amount: "  + 
+        this.getAction().getFoodAmount() + " Energy Amount: "  + 
+        this.getAction().getEnergyAmount() + " Material Amount: "  + 
+        this.getAction().getMaterialsAmount() + " Money Spent: "  + GenericSearch.getPathCost(this);
     }
 
     public String toString(){

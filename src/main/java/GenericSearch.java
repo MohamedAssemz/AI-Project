@@ -2,17 +2,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GenericSearch{
+    public static int expansions = 0;
     public static  int currentDepth;
     
-    public static Map<String, Boolean> visitedStates = new HashMap<>();
+    public static HashSet<String> visitedStates = new HashSet<>();
 
 
     public static boolean isStateVisited(String state) {
-        return visitedStates.containsKey(state);
+        return visitedStates.contains(state);
     }
 
     public static void markStateVisited(String state) {
-        visitedStates.put(state, true);
+        visitedStates.add(state);
     }
 
     public static void clearVisitedStates() {
@@ -78,6 +79,7 @@ public class GenericSearch{
 
         while (!queue.isEmpty()) {
             Node node = queue.poll();
+            expansions++;
 
             if(node!=null && !isStateVisited(node.VisitedString())){
                 if (LLAPSearch.visuals) {
@@ -125,8 +127,9 @@ public class GenericSearch{
 
         while (!stack.isEmpty()) {
             Node node = stack.pop();
+            expansions++;
 
-            if(node!=null && !isStateVisited(node.VisitedString())){
+            if(node!=null){
                 if (LLAPSearch.visuals) {
                     if(node.parent!=null){
                         System.out.println("Parent state: " + node.parent.toString()  + "\n");
@@ -142,8 +145,6 @@ public class GenericSearch{
                     return node; // Goal state found
                 }
 
-                markStateVisited(node.VisitedString());
-
                 List<Node> successors = expand(node);
                 stack.addAll(successors);
 
@@ -151,11 +152,8 @@ public class GenericSearch{
                     System.out.println("Next Action: " + stack.peek().action.getName()  + "\n");
                     System.out.println("--------------------------------------------");
                 }
-
-
                 
             }
-
         }
 
         return null; // Goal state not found
@@ -168,8 +166,9 @@ public class GenericSearch{
        while(true) {
         while (!stack.isEmpty()) {
             Node node = stack.pop();
+            expansions++;
 
-            if(node!=null && !isStateVisited(node.VisitedString())){
+            if(node!=null && !isStateVisited(node.VisitedString()) && node.getDepth() <= currentDepth){
                 if (LLAPSearch.visuals) {
                     if(node.parent!=null){
                         System.out.println("Parent state: " + node.parent.toString()  + "\n");
@@ -194,16 +193,17 @@ public class GenericSearch{
                     System.out.println("Next Action: " + stack.peek().action.getName()  + "\n");
                     System.out.println("--------------------------------------------");
                 }
-
-
                 
+            }else if(node.getDepth() > currentDepth){
+                stack.removeAllElements();
+                clearVisitedStates();
             }
 
         }
         if(currentDepth>1000) {
             return null;
         }
-           currentDepth+=1;
+           currentDepth = currentDepth + 1;
            stack.push(initialNode);
        }
     }
@@ -340,7 +340,7 @@ public class GenericSearch{
     }
     
     
-    private static int heuristic1(Node currentNode) {
+    public static int heuristic1(Node currentNode) {
     	// the heuristic assumes that the minimum cost to reach p.level=100 is the price of the min. build actions 
     	// to reach that level of prosperity
     	
@@ -376,47 +376,56 @@ public class GenericSearch{
     public static List<Node> expand(Node node) {
         List<Node> children = new ArrayList<>();
 
-        if (node != null && node.action.getDelay() > 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
-            if(node.getState().getMoney() >= (LLAPSearch.energyPrice + LLAPSearch.foodPrice + LLAPSearch.materialsPrice) && node.state.getFood() >= 1 && node.state.getMaterials() >= 1 && node.state.getEnergy() >= 1){
-                children.add(LLAPSearch.wait(node));
+        if (node.action.getDelay() > 1 ){
+            if(node.state.getFood() >= 1 && node.state.getMaterials() >= 1 && node.state.getEnergy() >= 1 && ((node.getState().getMoney_spent() + LLAPSearch.energyPrice + LLAPSearch.foodPrice + LLAPSearch.materialsPrice) <= 100000)){
+                Node var = LLAPSearch.wait(node);
+                if(var != null){
+                    children.add(var);
+                }
             }
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD1 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD1 && node.state.getMoney() >= (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice))){
-                children.add(LLAPSearch.build1(node));
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD1 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() > LLAPSearch.energyUseBUILD1 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice)) < 100000)){
+                Node var = LLAPSearch.build1(node);
+                if(var != null){
+                    children.add(var);
+                }
             }
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD2 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD2 && node.state.getMoney() >= (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice))) {
-                children.add(LLAPSearch.build2(node));
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD2 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() > LLAPSearch.energyUseBUILD2 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice)) < 100000)) {
+                Node var = LLAPSearch.build2(node);
+                if(var != null){
+                    children.add(var);
+                }
             }
-        }else if (node != null && node.getAction().getDelay() == 0 && node.state.getFood() > 0 && node.state.getMaterials() > 0 && node.state.getEnergy() > 0 && node.state.getMoney() > 0){
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD1 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD1 && node.state.getMoney() >= (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice))){
-                children.add(LLAPSearch.build1(node));
+        }else if (node.getAction().getDelay() == 1 || node.getAction().getDelay() == 0){
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD1 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() > LLAPSearch.energyUseBUILD1 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice)) < 100000)){
+                Node var = LLAPSearch.build1(node);
+                if(var != null){
+                    children.add(var);
+                }
             }
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD2 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD2 && node.state.getMoney() >= (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice))) {
-                children.add(LLAPSearch.build2(node));
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD2 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() > LLAPSearch.energyUseBUILD2 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice)) < 100000)) {
+                Node var = LLAPSearch.build2(node);
+                if(var != null){
+                    children.add(var);
+                }
             }
-            if (node.state.getEnergy() < 50 && (node.state.getMoney() >= LLAPSearch.energyPrice + LLAPSearch.foodPrice + LLAPSearch.materialsPrice) ) {
-                children.add(LLAPSearch.requestEnergy(node));
-                children.add(LLAPSearch.requestFood(node));
-                children.add(LLAPSearch.requestMaterials(node));
-            }   
-            
-        }
-        while(children.remove(null)){
-            if(LLAPSearch.visuals){
-                System.out.println("Null Child Removed");
-            }
-        };
-
-
-        for(int i=0; i<children.size(); i++){
-            if(isStateVisited(children.get(i).toString())){
-                if(LLAPSearch.visuals){
-                    System.out.println("New Child: " + children.get(i).toString());
-                    System.out.println("Duplicated Child: " + visitedStates.get(children.get(i).toString()) + "\n");
+            if ((node.state.getFood() >= 1 && node.state.getMaterials() >= 1 && node.state.getEnergy() >= 1) && ((node.getState().getMoney_spent() + LLAPSearch.energyPrice + LLAPSearch.foodPrice + LLAPSearch.materialsPrice) <= 100000)){
+                Node var = LLAPSearch.requestFood(node);
+                Node var2 = LLAPSearch.requestEnergy(node);
+                Node var3 = LLAPSearch.requestMaterials(node);
+                if(var != null){
+                    children.add(var);
                 }
 
-                children.remove(i);
+                if(var2 != null){
+                    children.add(var2);
+                }
+
+                if(var3 != null){
+                    children.add(var3);
+                }
             }
-        }
+            
+        } 
 
         if(LLAPSearch.visuals){
             System.out.println("Prosperity: " + node.state.getProsperity() );
