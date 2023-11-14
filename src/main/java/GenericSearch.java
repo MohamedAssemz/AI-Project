@@ -28,17 +28,9 @@ public class GenericSearch{
             "Initialize Node",
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
             false,
             false,
-            false,
-            0,
-            0,
-            0
+            false
         ),
         0
         );
@@ -318,24 +310,24 @@ public class GenericSearch{
     public static int getPathCost(Node currentNode) {
     	int cost=0;
     	while (currentNode.depth!=0) {
-    		cost+=currentNode.action.getPrice();
+    		cost+=currentNode.state.getMoney_spent();
     		currentNode=currentNode.parent;  		
     		
     	}
     	// cost for the root node action
-    	cost+=currentNode.action.getPrice();
+    	cost+=currentNode.state.getMoney_spent();
     	return cost;	
     }
 
         public static int getPathCostProsperity(Node currentNode) {
     	int cost=0;
     	while (currentNode.depth!=0) {
-    		cost+=currentNode.action.getProsperityChange();
+    		cost+=currentNode.state.getProsperity();
     		currentNode=currentNode.parent;  		
     		
     	}
     	// cost for the root node action
-    	cost+=currentNode.action.getProsperityChange();
+    	cost+=currentNode.state.getProsperity();
     	return cost;	
     }
     
