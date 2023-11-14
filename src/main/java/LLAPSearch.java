@@ -46,7 +46,6 @@ public class LLAPSearch extends GenericSearch {
             return answer;
         }else if(node != null){
 
-            int cost = 0;
             List<String> nodes = new LinkedList<>(); 
             List<String> plan = new LinkedList<>();
             String p = "";
@@ -56,7 +55,6 @@ public class LLAPSearch extends GenericSearch {
             
 
             while(node != null){
-                //cost = cost + node.getAction().getPrice();
                 plan.add(0, node.getAction().getName());
                 nodes.add(0, node.toString());
                 node = node.parent;
@@ -71,10 +69,10 @@ public class LLAPSearch extends GenericSearch {
             p = p + plan.remove(0);
 
             answer = p + ";" + MS + ";" + NE; 
-            //System.out.println("Solution Found!");
 
         }
 
+        GenericSearch.visitedStates.clear();
         return answer;
     }
 
@@ -165,20 +163,17 @@ public class LLAPSearch extends GenericSearch {
         " Energy: " + (min(node.state.getEnergy() + tempE - 1,50)) +
         " Materials: " + (min(node.state.getMaterials() + tempM - 1,50)) +       
         " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
-        " Delay: " + (delayRequestEnergy + 1)  + 
-        " Food Amount: "  + amountRequestFood + 
-        " Energy Amount: "  + 0 + 
-        " Material Amount: " + 0 +
+        " Delay: " + (delayRequestFood + 1)  + 
+        " Delay Amount: " + amountRequestFood +
         " FoodDelay: " + true + 
         " EnergyDelay: " + false + 
         " MaterialDelay: " + false;
 
-        if(isStateVisited(var)){
-            
+        if(GenericSearch.visitedStates.contains(var)){  
             return null;
         }else{
             
-            GenericSearch.markStateVisited(var);
+            GenericSearch.visitedStates.add(var);
         }
         return new Node(
             new State(
@@ -230,20 +225,17 @@ public class LLAPSearch extends GenericSearch {
         " Energy: " + (min(node.state.getEnergy() + tempE - 1,50)) +
         " Materials: " + (min(node.state.getMaterials() + tempM - 1,50)) +       
         " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
-        " Delay: " + (delayRequestEnergy + 1)  + 
-        " Food Amount: "  + 0 + 
-        " Energy Amount: "  + 0 + 
-        " Material Amount: " + amountRequestMaterials +
+        " Delay: " + (delayRequestMaterials + 1)  + 
+        " Delay Amount: " + amountRequestMaterials +
         " FoodDelay: " + false + 
         " EnergyDelay: " + false + 
         " MaterialDelay: " + true;
 
-        if(isStateVisited(var)){
-            
+        if(GenericSearch.visitedStates.contains(var)){  
             return null;
         }else{
             
-            GenericSearch.markStateVisited(var);
+            GenericSearch.visitedStates.add(var);
         }
  
         return new Node(
@@ -296,19 +288,16 @@ public class LLAPSearch extends GenericSearch {
         " Materials: " + (min(node.state.getMaterials() + tempM - 1,50)) +       
         " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
         " Delay: " + (delayRequestEnergy + 1)  + 
-        " Food Amount: "  + 0 + 
-        " Energy Amount: "  + amountRequestEnergy + 
-        " Material Amount: " + 0 +
+        " Delay Amount: " + amountRequestEnergy +
         " FoodDelay: " + false + 
         " EnergyDelay: " + true + 
         " MaterialDelay: " + false;
 
-        if(isStateVisited(var)){
-            
+        if(GenericSearch.visitedStates.contains(var)){  
             return null;
         }else{
             
-            GenericSearch.markStateVisited(var);
+            GenericSearch.visitedStates.add(var);
         }
 
         return new Node(
@@ -387,20 +376,17 @@ public class LLAPSearch extends GenericSearch {
                 " Materials: " + (node.state.getMaterials() + tempM - 1) +          
                 " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
              	" Delay: " + max(node.action.getDelay() - 1,0)  + 
-                " Food Amount: "  + tempF2 + 
-                " Energy Amount: "  + tempE2 + 
-                " Material Amount: " + tempM2 +
+                " Delay Amount: " + tempAmount +
                 " FoodDelay: " + delayfood + 
                 " EnergyDelay: " + delayenergy + 
                 " MaterialDelay: " + delaymaterials;
 
 
-        if(isStateVisited(var)){
-            
+        if(GenericSearch.visitedStates.contains(var)){  
             return null;
         }else{
             
-            GenericSearch.markStateVisited(var);
+            GenericSearch.visitedStates.add(var);
         }
 
         return new Node(
@@ -477,19 +463,16 @@ public class LLAPSearch extends GenericSearch {
         " Materials: " + (node.state.getMaterials() + tempM - materialsUseBUILD1) +          
         " Money Spent: " + (priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice)) + 
         " Delay: " + max(node.action.getDelay() - 1,0)  + 
-        " Food Amount: "  + tempF2 + 
-        " Energy Amount: "  + tempE2 + 
-        " Material Amount: " + tempM2 +
+        " Delay Amount: " + tempAmount +
         " FoodDelay: " + delayfood + 
         " EnergyDelay: " + delayenergy + 
         " MaterialDelay: " + delaymaterials;
 
-        if(isStateVisited(var)){
-            
+        if(GenericSearch.visitedStates.contains(var)){  
             return null;
         }else{
             
-            GenericSearch.markStateVisited(var);
+            GenericSearch.visitedStates.add(var);
         }
 
         return new Node(
@@ -567,19 +550,16 @@ public class LLAPSearch extends GenericSearch {
         " Materials: " + (node.state.getMaterials() + tempM - materialsUseBUILD2) +          
         " Money Spent: " + (node.state.getMoney_spent() + priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice)) + 
         " Delay: " + max(node.action.getDelay() - 1,0)  + 
-        " Food Amount: "  + tempF2 + 
-        " Energy Amount: "  + tempE2 + 
-        " Material Amount: " + tempM2 +
+        " Delay Amount: " + tempAmount +
         " FoodDelay: " + delayfood + 
         " EnergyDelay: " + delayenergy + 
         " MaterialDelay: " + delaymaterials;
 
-        if(isStateVisited(var)){
-            
+        if(GenericSearch.visitedStates.contains(var)){  
             return null;
         }else{
             
-            GenericSearch.markStateVisited(var);
+            GenericSearch.visitedStates.add(var);
         }
 
         return new Node(
