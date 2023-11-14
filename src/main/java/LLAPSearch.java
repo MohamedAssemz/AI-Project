@@ -34,6 +34,20 @@ public class LLAPSearch extends GenericSearch {
 
         public static boolean visuals = false;
 
+        public static int DuplicateProsperity = 0;
+        public static int DuplicateMoney = 0;
+        public static int DuplicateFood = 0;
+        public static int DuplicateEnergy = 0;
+        public static int DuplicateMaterials = 0;
+        public static int DuplicateMoneySpent = 0;
+        public static int DuplicateDelay = 0;
+        public static int DuplicateDelayAmount = 0;
+        public static boolean DuplicateFoodDelay = false;
+        public static boolean DuplicateEnergyDelay = false;
+        public static boolean DuplicateMaterialDelay = false;
+
+        public static String duplicate = "";
+
     public static String search(String initialState, String strategy, boolean visualize) {
         visuals = visualize;
         State initial = parseInitialState(initialState);
@@ -157,24 +171,37 @@ public class LLAPSearch extends GenericSearch {
             tempM = 0;
         }
 
-        String var = "Prosperity: " + (node.state.getProsperity()) +
-        " Money: " + (node.state.getMoney() - energyPrice - foodPrice - materialsPrice) +
-        " Food: " +(min(node.state.getFood() + tempF - 1,50))  +
-        " Energy: " + (min(node.state.getEnergy() + tempE - 1,50)) +
-        " Materials: " + (min(node.state.getMaterials() + tempM - 1,50)) +       
-        " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
-        " Delay: " + (delayRequestFood + 1)  + 
-        " Delay Amount: " + amountRequestFood +
-        " FoodDelay: " + true + 
-        " EnergyDelay: " + false + 
-        " MaterialDelay: " + false;
+        DuplicateProsperity = node.state.getProsperity();
+        DuplicateMoney = node.state.getMoney() - energyPrice - foodPrice - materialsPrice;
+        DuplicateFood = min(node.state.getFood() + tempF - 1,50);
+        DuplicateEnergy = min(node.state.getEnergy() + tempE - 1,50);
+        DuplicateMaterials = min(node.state.getMaterials() + tempM - 1,50);
+        DuplicateMoneySpent = node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice;
+        DuplicateDelay = delayRequestFood + 1;
+        DuplicateDelayAmount = amountRequestFood;
+        DuplicateFoodDelay = true;
+        DuplicateEnergyDelay = false;
+        DuplicateMaterialDelay = false;
 
-        if(GenericSearch.visitedStates.contains(var)){  
+        duplicate = "Prosperity: " + DuplicateProsperity +
+        " Money: " + DuplicateMoney +
+        " Food: " + DuplicateFood +	
+        " Energy: " + DuplicateEnergy +
+        " Materials: " + DuplicateMaterials +
+        " Money Spent: " + DuplicateMoneySpent +
+        " Delay: " + DuplicateDelay +
+        " Delay Amount: " + DuplicateDelayAmount +
+        " FoodDelay: " + DuplicateFoodDelay +
+        " EnergyDelay: " + DuplicateEnergyDelay +
+        " MaterialDelay: " + DuplicateMaterialDelay;
+
+        if(GenericSearch.visitedStates.contains(duplicate)){  
             return null;
         }else{
             
-            GenericSearch.visitedStates.add(var);
+            GenericSearch.visitedStates.add(duplicate);
         }
+
         return new Node(
             new State(
                 node.state.getProsperity(),
@@ -219,23 +246,35 @@ public class LLAPSearch extends GenericSearch {
             tempM = 0;
         }
 
-        String var = "Prosperity: " + (node.state.getProsperity()) +
-        " Money: " + (node.state.getMoney() - energyPrice - foodPrice - materialsPrice) +
-        " Food: " +(min(node.state.getFood() + tempF - 1,50))  +
-        " Energy: " + (min(node.state.getEnergy() + tempE - 1,50)) +
-        " Materials: " + (min(node.state.getMaterials() + tempM - 1,50)) +       
-        " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
-        " Delay: " + (delayRequestMaterials + 1)  + 
-        " Delay Amount: " + amountRequestMaterials +
-        " FoodDelay: " + false + 
-        " EnergyDelay: " + false + 
-        " MaterialDelay: " + true;
+        DuplicateProsperity = node.state.getProsperity();
+        DuplicateMoney = node.state.getMoney() - energyPrice - foodPrice - materialsPrice;
+        DuplicateFood = min(node.state.getFood() + tempF - 1,50);
+        DuplicateEnergy = min(node.state.getEnergy() + tempE - 1,50);
+        DuplicateMaterials = min(node.state.getMaterials() + tempM - 1,50);
+        DuplicateMoneySpent = node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice;
+        DuplicateDelay = delayRequestFood + 1;
+        DuplicateDelayAmount = amountRequestMaterials;
+        DuplicateFoodDelay = false;
+        DuplicateEnergyDelay = false;
+        DuplicateMaterialDelay = true;
 
-        if(GenericSearch.visitedStates.contains(var)){  
+        duplicate = "Prosperity: " + DuplicateProsperity +
+        " Money: " + DuplicateMoney +
+        " Food: " + DuplicateFood +	
+        " Energy: " + DuplicateEnergy +
+        " Materials: " + DuplicateMaterials +
+        " Money Spent: " + DuplicateMoneySpent +
+        " Delay: " + DuplicateDelay +
+        " Delay Amount: " + DuplicateDelayAmount +
+        " FoodDelay: " + DuplicateFoodDelay +
+        " EnergyDelay: " + DuplicateEnergyDelay +
+        " MaterialDelay: " + DuplicateMaterialDelay;
+
+        if(GenericSearch.visitedStates.contains(duplicate)){  
             return null;
         }else{
             
-            GenericSearch.visitedStates.add(var);
+            GenericSearch.visitedStates.add(duplicate);
         }
  
         return new Node(
@@ -281,23 +320,35 @@ public class LLAPSearch extends GenericSearch {
             tempM = 0;
         }
 
-        String var = "Prosperity: " + (node.state.getProsperity()) +
-        " Money: " + (node.state.getMoney() - energyPrice - foodPrice - materialsPrice) +
-        " Food: " +(min(node.state.getFood() + tempF - 1,50))  +
-        " Energy: " + (min(node.state.getEnergy() + tempE - 1,50)) +
-        " Materials: " + (min(node.state.getMaterials() + tempM - 1,50)) +       
-        " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
-        " Delay: " + (delayRequestEnergy + 1)  + 
-        " Delay Amount: " + amountRequestEnergy +
-        " FoodDelay: " + false + 
-        " EnergyDelay: " + true + 
-        " MaterialDelay: " + false;
+        DuplicateProsperity = node.state.getProsperity();
+        DuplicateMoney = node.state.getMoney() - energyPrice - foodPrice - materialsPrice;
+        DuplicateFood = min(node.state.getFood() + tempF - 1,50);
+        DuplicateEnergy = min(node.state.getEnergy() + tempE - 1,50);
+        DuplicateMaterials = min(node.state.getMaterials() + tempM - 1,50);
+        DuplicateMoneySpent = node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice;
+        DuplicateDelay = delayRequestFood + 1;
+        DuplicateDelayAmount = amountRequestEnergy;
+        DuplicateFoodDelay = false;
+        DuplicateEnergyDelay = true;
+        DuplicateMaterialDelay = false;
 
-        if(GenericSearch.visitedStates.contains(var)){  
+        duplicate = "Prosperity: " + DuplicateProsperity +
+        " Money: " + DuplicateMoney +
+        " Food: " + DuplicateFood +	
+        " Energy: " + DuplicateEnergy +
+        " Materials: " + DuplicateMaterials +
+        " Money Spent: " + DuplicateMoneySpent +
+        " Delay: " + DuplicateDelay +
+        " Delay Amount: " + DuplicateDelayAmount +
+        " FoodDelay: " + DuplicateFoodDelay +
+        " EnergyDelay: " + DuplicateEnergyDelay +
+        " MaterialDelay: " + DuplicateMaterialDelay;
+
+        if(GenericSearch.visitedStates.contains(duplicate)){  
             return null;
         }else{
             
-            GenericSearch.visitedStates.add(var);
+            GenericSearch.visitedStates.add(duplicate);
         }
 
         return new Node(
@@ -367,26 +418,35 @@ public class LLAPSearch extends GenericSearch {
             tempAmount = tempM2;
         }
 
+        DuplicateProsperity = node.state.getProsperity();
+        DuplicateMoney = node.state.getMoney() - energyPrice - foodPrice - materialsPrice;
+        DuplicateFood = node.state.getFood() + tempF - 1;
+        DuplicateEnergy = node.state.getEnergy() + tempE - 1;
+        DuplicateMaterials = node.state.getEnergy() + tempM - 1;
+        DuplicateMoneySpent = node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice;
+        DuplicateDelay = max(node.action.getDelay() - 1,0);
+        DuplicateDelayAmount = tempAmount;
+        DuplicateFoodDelay = delayfood;
+        DuplicateEnergyDelay = delayenergy;
+        DuplicateMaterialDelay = delaymaterials;
 
+        duplicate = "Prosperity: " + DuplicateProsperity +
+        " Money: " + DuplicateMoney +
+        " Food: " + DuplicateFood +	
+        " Energy: " + DuplicateEnergy +
+        " Materials: " + DuplicateMaterials +
+        " Money Spent: " + DuplicateMoneySpent +
+        " Delay: " + DuplicateDelay +
+        " Delay Amount: " + DuplicateDelayAmount +
+        " FoodDelay: " + DuplicateFoodDelay +
+        " EnergyDelay: " + DuplicateEnergyDelay +
+        " MaterialDelay: " + DuplicateMaterialDelay;
 
-        String var = "Prosperity: " + (node.state.getProsperity()) +
-                " Money: " + (node.state.getMoney() - energyPrice - foodPrice - materialsPrice) +
-                " Food: " +(node.state.getFood() + tempF - 1)  +
-                " Energy: " + (node.state.getEnergy() + tempE - 1) +
-                " Materials: " + (node.state.getMaterials() + tempM - 1) +          
-                " Money Spent: " + (node.state.getMoney_spent() + energyPrice + foodPrice + materialsPrice) + 
-             	" Delay: " + max(node.action.getDelay() - 1,0)  + 
-                " Delay Amount: " + tempAmount +
-                " FoodDelay: " + delayfood + 
-                " EnergyDelay: " + delayenergy + 
-                " MaterialDelay: " + delaymaterials;
-
-
-        if(GenericSearch.visitedStates.contains(var)){  
+        if(GenericSearch.visitedStates.contains(duplicate)){  
             return null;
         }else{
             
-            GenericSearch.visitedStates.add(var);
+            GenericSearch.visitedStates.add(duplicate);
         }
 
         return new Node(
@@ -455,24 +515,38 @@ public class LLAPSearch extends GenericSearch {
         }else if(tempM2 > 0){
             tempAmount = tempM2;
         }
+                
+        DuplicateProsperity = node.state.getProsperity() + prosperityBUILD1;
+        DuplicateMoney = node.state.getMoney() - priceBUILD1 - (energyUseBUILD1 * energyPrice) - (materialsUseBUILD1 * materialsPrice) - (foodUseBUILD1 * foodPrice);
+        DuplicateFood = node.state.getFood() + tempF - foodUseBUILD1;
+        DuplicateEnergy = node.state.getEnergy() + tempE - energyUseBUILD1;
+        DuplicateMaterials = node.state.getMaterials() + tempM - materialsUseBUILD1;
+        DuplicateMoneySpent = node.state.getMoney_spent() + priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice);
+        DuplicateDelay = max(node.action.getDelay() - 1,0);
+        DuplicateDelayAmount = tempAmount;
+        DuplicateFoodDelay = delayfood;
+        DuplicateEnergyDelay = delayenergy;
+        DuplicateMaterialDelay = delaymaterials;
 
-        String var = "Prosperity: " + (node.state.getProsperity() + prosperityBUILD1) +
-        " Money: " + (node.state.getMoney() - priceBUILD1 - (energyUseBUILD1 * energyPrice) - (materialsUseBUILD1 * materialsPrice) - (foodUseBUILD1 * foodPrice)) +
-        " Food: " +(node.state.getFood() + tempF - foodUseBUILD1)  +
-        " Energy: " + (node.state.getEnergy() + tempE - energyUseBUILD1) +
-        " Materials: " + (node.state.getMaterials() + tempM - materialsUseBUILD1) +          
-        " Money Spent: " + (priceBUILD1 + (energyUseBUILD1 * energyPrice) + (materialsUseBUILD1 * materialsPrice) + (foodUseBUILD1 * foodPrice)) + 
-        " Delay: " + max(node.action.getDelay() - 1,0)  + 
-        " Delay Amount: " + tempAmount +
-        " FoodDelay: " + delayfood + 
-        " EnergyDelay: " + delayenergy + 
-        " MaterialDelay: " + delaymaterials;
+        duplicate = "Prosperity: " + DuplicateProsperity +
+        " Money: " + DuplicateMoney +
+        " Food: " + DuplicateFood +	
+        " Energy: " + DuplicateEnergy +
+        " Materials: " + DuplicateMaterials +
+        " Money Spent: " + DuplicateMoneySpent +
+        " Delay: " + DuplicateDelay +
+        " Delay Amount: " + DuplicateDelayAmount +
+        " FoodDelay: " + DuplicateFoodDelay +
+        " EnergyDelay: " + DuplicateEnergyDelay +
+        " MaterialDelay: " + DuplicateMaterialDelay;
 
-        if(GenericSearch.visitedStates.contains(var)){  
+
+
+        if(GenericSearch.visitedStates.contains(duplicate)){  
             return null;
         }else{
             
-            GenericSearch.visitedStates.add(var);
+            GenericSearch.visitedStates.add(duplicate);
         }
 
         return new Node(
@@ -542,24 +616,35 @@ public class LLAPSearch extends GenericSearch {
             tempAmount = tempM2;
         }
 
-        
-        String var = "Prosperity: " + (node.state.getProsperity() + prosperityBUILD2) +
-        " Money: " + (node.state.getMoney() - priceBUILD2 - (energyUseBUILD2 * energyPrice) - (materialsUseBUILD2 * materialsPrice) - (foodUseBUILD2 * foodPrice)) +
-        " Food: " +(node.state.getFood() + tempF - foodUseBUILD2)  +
-        " Energy: " + (node.state.getEnergy() + tempE - energyUseBUILD2) +
-        " Materials: " + (node.state.getMaterials() + tempM - materialsUseBUILD2) +          
-        " Money Spent: " + (node.state.getMoney_spent() + priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice)) + 
-        " Delay: " + max(node.action.getDelay() - 1,0)  + 
-        " Delay Amount: " + tempAmount +
-        " FoodDelay: " + delayfood + 
-        " EnergyDelay: " + delayenergy + 
-        " MaterialDelay: " + delaymaterials;
+        DuplicateProsperity = node.state.getProsperity() + prosperityBUILD2;
+        DuplicateMoney = node.state.getMoney() - priceBUILD2 - (energyUseBUILD2 * energyPrice) - (materialsUseBUILD2 * materialsPrice) - (foodUseBUILD2 * foodPrice);
+        DuplicateFood = node.state.getFood() + tempF - foodUseBUILD2;
+        DuplicateEnergy = node.state.getEnergy() + tempE - energyUseBUILD2;
+        DuplicateMaterials = node.state.getMaterials() + tempM - materialsUseBUILD2;
+        DuplicateMoneySpent = node.state.getMoney_spent() + priceBUILD2 + (energyUseBUILD2 * energyPrice) + (materialsUseBUILD2 * materialsPrice) + (foodUseBUILD2 * foodPrice);
+        DuplicateDelay = max(node.action.getDelay() - 1,0);
+        DuplicateDelayAmount = tempAmount;
+        DuplicateFoodDelay = delayfood;
+        DuplicateEnergyDelay = delayenergy;
+        DuplicateMaterialDelay = delaymaterials;
 
-        if(GenericSearch.visitedStates.contains(var)){  
+        duplicate = "Prosperity: " + DuplicateProsperity +
+        " Money: " + DuplicateMoney +
+        " Food: " + DuplicateFood +	
+        " Energy: " + DuplicateEnergy +
+        " Materials: " + DuplicateMaterials +
+        " Money Spent: " + DuplicateMoneySpent +
+        " Delay: " + DuplicateDelay +
+        " Delay Amount: " + DuplicateDelayAmount +
+        " FoodDelay: " + DuplicateFoodDelay +
+        " EnergyDelay: " + DuplicateEnergyDelay +
+        " MaterialDelay: " + DuplicateMaterialDelay;
+
+        if(GenericSearch.visitedStates.contains(duplicate)){  
             return null;
         }else{
             
-            GenericSearch.visitedStates.add(var);
+            GenericSearch.visitedStates.add(duplicate);
         }
 
         return new Node(
