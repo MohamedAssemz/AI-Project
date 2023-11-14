@@ -683,7 +683,7 @@ public class LLAPSearch extends GenericSearch {
 
 
 
-        String solution = search(initialState7, "DF", false);
+        String solution = search(initialState10, "DF", false);
 
         System.out.println(solution);
         System.out.println("Visited Nodes: " + visitedStates.size());

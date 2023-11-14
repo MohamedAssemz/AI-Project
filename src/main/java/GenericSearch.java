@@ -66,14 +66,14 @@ public class GenericSearch{
     }
 
     private static Node breadthFirstSearch(Node initialNode) {
-        Queue<Node> queue = new LinkedList<>();
+        ArrayList<Node> queue = new ArrayList<>();
         queue.add(initialNode);
 
         while (!queue.isEmpty()) {
-            Node node = queue.poll();
+            Node node = queue.remove(0);
             expansions++;
 
-            if(node!=null && !isStateVisited(node.VisitedString())){
+            if(node!=null){
                 if (LLAPSearch.visuals) {
                     if(node.parent!=null){
                         System.out.println("Parent state: " + node.parent.toString()  + "\n");
@@ -89,15 +89,13 @@ public class GenericSearch{
                     }
                     return node; // Goal state found
                 }
-
-                markStateVisited(node.VisitedString());
             
                 List<Node> successors = expand(node);
                 queue.addAll(successors);
 
 
                 if(LLAPSearch.visuals && !queue.isEmpty()){
-                    System.out.println("Next Action: " + queue.peek().action.getName()  + "\n");
+                    System.out.println("Next Action: " + queue.get(0).action.getName()  + "\n");
                     System.out.println("--------------------------------------------");
                 }
 
@@ -114,11 +112,11 @@ public class GenericSearch{
     }
 
     private static Node depthFirstSearch(Node initialNode) {
-        Stack<Node> stack = new Stack<>();
-        stack.push(initialNode);
+        ArrayList<Node> stack = new ArrayList<>();
+        stack.add(0, initialNode);
 
         while (!stack.isEmpty()) {
-            Node node = stack.pop();
+            Node node = stack.remove(0);
             expansions++;
 
             if(node!=null){
@@ -138,10 +136,12 @@ public class GenericSearch{
                 }
 
                 List<Node> successors = expand(node);
-                stack.addAll(successors);
+                while(!successors.isEmpty()){
+                    stack.add(0,successors.remove(0));
+                }
 
                 if(LLAPSearch.visuals && !stack.isEmpty()){
-                    System.out.println("Next Action: " + stack.peek().action.getName()  + "\n");
+                    System.out.println("Next Action: " + stack.get(0).action.getName()  + "\n");
                     System.out.println("--------------------------------------------");
                 }
                 
@@ -152,15 +152,15 @@ public class GenericSearch{
     }
 
     private static Node iterativeDeepeningSearch(Node initialNode) {
-        Stack<Node> stack = new Stack<>();
+        ArrayList<Node> stack = new ArrayList<>();
         currentDepth = 0;
   
        while(true) {
         while (!stack.isEmpty()) {
-            Node node = stack.pop();
+            Node node = stack.remove(0);
             expansions++;
 
-            if(node!=null && !isStateVisited(node.VisitedString()) && node.getDepth() <= currentDepth){
+            if(node!=null && node.getDepth() <= currentDepth){
                 if (LLAPSearch.visuals) {
                     if(node.parent!=null){
                         System.out.println("Parent state: " + node.parent.toString()  + "\n");
@@ -176,19 +176,19 @@ public class GenericSearch{
                     return node; // Goal state found
                 }
 
-                markStateVisited(node.VisitedString());
-
                 List<Node> successors = expand(node);
-                stack.addAll(successors);
+                while(!successors.isEmpty()){
+                    stack.add(0,successors.remove(0));
+                }
 
                 if(LLAPSearch.visuals && !stack.isEmpty()){
-                    System.out.println("Next Action: " + stack.peek().action.getName()  + "\n");
+                    System.out.println("Next Action: " + stack.get(0).action.getName()  + "\n");
                     System.out.println("--------------------------------------------");
                 }
                 
             }else if(node.getDepth() > currentDepth){
-                stack.removeAllElements();
-                clearVisitedStates();
+                stack.removeAll(stack);
+                visitedStates.clear();
             }
 
         }
@@ -196,7 +196,7 @@ public class GenericSearch{
             return null;
         }
            currentDepth = currentDepth + 1;
-           stack.push(initialNode);
+           stack.add(initialNode);
        }
     }
 
@@ -211,13 +211,12 @@ public class GenericSearch{
             Node node = priorityQueue.poll();
 
             if (node!=null){
-            if( !isStateVisited(node.VisitedString())){
                 if (LLAPSearch.visuals) {
                     if(node.parent!=null){
                         System.out.println("Parent state: " + node.parent.toString()  + "\n");
                     }
-                    System.out.println("Current state: " + node.toString()  + "\n");
-                    System.out.println("Remaining nodes in queue: " + priorityQueue.size()  + "\n");
+                System.out.println("Current state: " + node.toString()  + "\n");
+                System.out.println("Remaining nodes in queue: " + priorityQueue.size()  + "\n");
 
                 }
                 if (isGoalState(node.getState())) {
@@ -230,18 +229,17 @@ public class GenericSearch{
                     markStateVisited(node.VisitedString());
                 }
             
-            List<Node> successors = expand(node);
-            priorityQueue.addAll(successors);
+                List<Node> successors = expand(node);
+                priorityQueue.addAll(successors);
 
-            if(LLAPSearch.visuals && !priorityQueue.isEmpty()){
-                System.out.println("Next Action: " + priorityQueue.peek().action.getName()  + "\n");
-                System.out.println("--------------------------------------------");
+                if(LLAPSearch.visuals && !priorityQueue.isEmpty()){
+                    System.out.println("Next Action: " + priorityQueue.peek().action.getName()  + "\n");
+                    System.out.println("--------------------------------------------");
+                }
+
+
             }
-
-
-        }
         
-        }
         }
 
         return null; // Goal state not found
@@ -366,7 +364,7 @@ public class GenericSearch{
     
 
     public static List<Node> expand(Node node) {
-        List<Node> children = new ArrayList<>();
+        ArrayList<Node> children = new ArrayList<>();
 
         if (node.action.getDelay() > 1 ){
             if(node.state.getFood() >= 1 && node.state.getMaterials() >= 1 && node.state.getEnergy() >= 1 && ((node.getState().getMoney_spent() + LLAPSearch.energyPrice + LLAPSearch.foodPrice + LLAPSearch.materialsPrice) <= 100000)){
