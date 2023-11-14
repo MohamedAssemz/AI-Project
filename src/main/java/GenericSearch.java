@@ -430,26 +430,26 @@ public class GenericSearch{
                     children.add(var);
                 }
             }
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD1 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD1 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice)) <= 100000)){
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD1 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() > LLAPSearch.energyUseBUILD1 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice)) < 100000)){
                 Node var = LLAPSearch.build1(node);
                 if(var != null){
                     children.add(var);
                 }
             }
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD2 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD2 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice)) <= 100000)) {
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD2 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() > LLAPSearch.energyUseBUILD2 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice)) < 100000)) {
                 Node var = LLAPSearch.build2(node);
                 if(var != null){
                     children.add(var);
                 }
             }
         }else if (node.getAction().getDelay() == 1 || node.getAction().getDelay() == 0){
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD1 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD1 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice)) <= 100000)){
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD1 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD1 && node.state.getEnergy() > LLAPSearch.energyUseBUILD1 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD1 + (LLAPSearch.energyUseBUILD1 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD1 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD1 * LLAPSearch.foodPrice)) < 100000)){
                 Node var = LLAPSearch.build1(node);
                 if(var != null){
                     children.add(var);
                 }
             }
-            if (node.state.getFood() >= LLAPSearch.foodUseBUILD2 && node.state.getMaterials() >= LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() >= LLAPSearch.energyUseBUILD2 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice)) <= 100000)) {
+            if (node.state.getFood() > LLAPSearch.foodUseBUILD2 && node.state.getMaterials() > LLAPSearch.materialsUseBUILD2 && node.state.getEnergy() > LLAPSearch.energyUseBUILD2 && (node.state.getMoney_spent() + (LLAPSearch.priceBUILD2 + (LLAPSearch.energyUseBUILD2 * LLAPSearch.energyPrice) + (LLAPSearch.materialsUseBUILD2 * LLAPSearch.materialsPrice) + (LLAPSearch.foodUseBUILD2 * LLAPSearch.foodPrice)) < 100000)) {
                 Node var = LLAPSearch.build2(node);
                 if(var != null){
                     children.add(var);
